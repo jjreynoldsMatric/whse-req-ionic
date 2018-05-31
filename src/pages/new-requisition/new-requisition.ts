@@ -5,6 +5,7 @@ import { ReasonCodesProvider } from '../../providers/reason-codes/reason-codes';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ItemFormControlComponent } from '../../components/item-form-control/item-form-control';
 import { ItemFormArrayComponent } from '../../components/item-form-array/item-form-array';
+import { RequisitionProvider } from '../../providers/requisition/requisition';
 
 /**
  * Generated class for the NewRequisitionPage page.
@@ -29,7 +30,7 @@ export class NewRequisitionPage {
 
   newReqForm: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider) {
     this.newReqForm = this.fb.group({
       items: ItemFormArrayComponent.buildItems()
     })
@@ -47,6 +48,10 @@ export class NewRequisitionPage {
     this.items.push({
       listItem: {matricPN: this.matricPN, quantityRequested: this.quantity, lotNum: this.lotNum, reasonCode: this.reasonCode, operation: this.operation}
     });
+  }
+
+  submit() {
+    this.reqService.saveRequisition(this.newReqForm);
   }
 
 }

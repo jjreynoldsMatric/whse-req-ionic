@@ -19,24 +19,28 @@
 
 
 <ion-content padding>
-    <table>
-      <thead>
-        <th>ID</th>
-        <th>Type</th>
-        <th>Requested On</th>
-        <th>By</th>
-        <th>Manage</th>
-      </thead>
-      <div *ngFor="let req of reqService.requisitions">
-        <tbody *ngIf="req.filled===true">
-          <td>{{req.id}}</td>
-          <td *ngIf="req.job.length == 0; ">Misc. Issue</td>
-          <td *ngIf="req.job.length != 0; ">Job Issue</td>
-          <td>{{req.createDate | date:'shortDate'}}</td>
-          <td>{{req.employee}}</td>
-          <td><button ion-button (click)="manage(req)">Manage</button></td>
-        </tbody>
-      </div>
-    </table>
+    <ion-grid>
+        <ion-row>
+          <ion-col>ID</ion-col>
+          <ion-col>Type</ion-col>
+          <ion-col>Requested On</ion-col>
+          <ion-col>By</ion-col>
+          <ion-col>Manage</ion-col>
+        </ion-row>
+    
+        <div *ngFor="let req of reqService.requisitions">
+          <div *ngIf="req.filled===true" ion-row>
+            <ion-col>{{req.id}}</ion-col>
+            <ion-col *ngIf="req.job.length == 0; ">Misc. Issue</ion-col>
+            <ion-col *ngIf="req.job.length != 0; ">Job Issue</ion-col>
+            <ion-col>{{req.createDate | date:'shortDate'}}</ion-col>
+            <ion-col>{{req.employee}}</ion-col>
+            <ion-col>
+              <button ion-button (click)="manage(req)">Manage</button>
+            </ion-col>
+          </div>
+        </div>
+      </ion-grid>
+    
 
 </ion-content>

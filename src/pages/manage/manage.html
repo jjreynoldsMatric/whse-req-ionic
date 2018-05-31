@@ -6,60 +6,65 @@
 -->
 <ion-header>
 
-    <ion-navbar>
-        <ion-title>Manage</ion-title>
-        <ion-buttons ion-nav-buttons>
-          <button ion-button (click)="goToNewReq()">New Requisition</button>
-          <button ion-button (click)="goToOpenReqs()">Open Requisitions</button>
-          <button ion-button (click)="goToCompletedReqs()">Completed Requisitions</button>
-        </ion-buttons>
-        
-      </ion-navbar>
+  <ion-navbar>
+    <ion-title>Manage</ion-title>
+    <ion-buttons ion-nav-buttons>
+      <button ion-button (click)="goToNewReq()">New Requisition</button>
+      <button ion-button (click)="goToOpenReqs()">Open Requisitions</button>
+      <button ion-button (click)="goToCompletedReqs()">Completed Requisitions</button>
+    </ion-buttons>
+
+  </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-    <div> 
+  <ion-grid>
+    <ion-row>
+      <ion-col>
         <div *ngIf="req.job.length == 0; else elseBlock">
           <h2>Miscellaneous Issue</h2>
         </div>
         <ng-template #elseBlock>
           <h2>Job Material Issue</h2>
         </ng-template>
+      </ion-col>
+    
+      <ion-col>
         <h2>Warehouse Requisition: {{req.id}}</h2>
-    </div>
-      <div>
-        <p>Submitted By: {{req.employee}}</p>
-        <div *ngIf="job">{{req.job}}</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <p>Submitted By: {{req.employee}}</p>
+      <div *ngIf="job">{{req.job}}</div>
+    </ion-row>
+
+      <ion-row>
+        <ion-col>Matric Part Number</ion-col>
+        <ion-col>Quantity</ion-col>
+        <ion-col>Lot #</ion-col>
+        <ion-col>Resource Code</ion-col>
+        <ion-col>Operation</ion-col>
+        <ion-col>Filled</ion-col>
+        <ion-col>Locations</ion-col>
+        <ion-col>Action</ion-col>
+      </ion-row>
+      <div *ngFor="let item of req.requisitionItem" ion-row>
+        <ion-col>{{item.item}}</ion-col>
+        <ion-col>{{item.quantity}}</ion-col>
+        <ion-col>{{item.lot}}</ion-col>
+        <ion-col>{{item.reasonCode}}</ion-col>
+        <ion-col>{{item.operation}}</ion-col>
+        <ion-col>{{item.quantityFilled}}/{{item.quantity}}</ion-col>
+        <ion-col>
+            <ion-row *ngFor="let location of item.itemLocViewModel ; index as i" [attr.data-index]="i">{{location.location}}: {{location.qtyOnHand}}</ion-row>
+          
+        </ion-col>
+        <ion-col>
+          <button (click)="issueParts(item)">Issue Parts</button>
+        </ion-col>
       </div>
-      <table>
-        <thead>
-          <th>Matric Part Number</th>
-          <th>Quantity</th>
-          <th>Lot #</th>
-          <th>Resource Code</th>
-          <th>Operation</th>
-          <th>Filled</th>
-          <th>Locations</th>
-          <th></th>
-        </thead>
-        <tbody *ngFor="let item of req.requisitionItem">
-          <td>{{item.item}}</td>
-          <td>{{item.quantity}}</td>
-          <td>{{item.lot}}</td>
-          <td>{{item.reasonCode}}</td>
-          <td>{{item.operation}}</td>
-          <td>{{item.quantityFilled}}/{{item.quantity}}</td>
-          <td>
-            <ul>
-              <li *ngFor="let location of item.itemLocViewModel ; index as i" [attr.data-index]="i" >{{location.location}}: {{location.qtyOnHand}}</li>
-            </ul>
-          </td>
-          <td>
-            <button (click)="issueParts(item)">Issue Parts</button>
-          </td>
-        </tbody>
- 
-      </table>
+
+  </ion-grid>
 </ion-content>

@@ -14,52 +14,47 @@
 
 
 <ion-content padding>
-  <h2>New Requisition</h2>
-  <div>
-    <form [formGroup]="newReqForm" (ngSubmit)="submit()">
-      <fieldset >
-        <label for="employee">Employee</label>
-        <select id="employee"  name="employee">
-          <option *ngFor="let employee of employeeService.employees" [value]="employee.id">
-            {{employee.empNum}} - {{employee.fname}} {{employee.lname}}
-          </option>
-        </select>
+  <ion-grid>
+    <div>
 
-        <label for="job">Job or MR #</label>
-        <input type="text" id="job" name="job">
+      <form [formGroup]="newReqForm" (ngSubmit)="submit()">
+        <fieldset>
+          <ion-row>
+            <ion-col col-4>
+              <ion-row>
+                <label for="employee">Employee</label>
+              </ion-row>
+              <ion-row style="padding-top: 1px">
+                <select id="employee" name="employee">
+                  <option *ngFor="let employee of employeeService.employees" [value]="employee.id">
+                    {{employee.empNum}} - {{employee.fname}} {{employee.lname}}
+                  </option>
+                </select>
+              </ion-row>
+            </ion-col>
+            <ion-col col-4>
+              <ion-row>
+                <label for="job">Job or MR #</label>
+              </ion-row>
+              <ion-row>
+                <input type="text" id="job" name="job">
+              </ion-row>
+            </ion-col>
+            <ion-col col-4>
+              <ion-row>
+                <label for="department">Department</label>
+              </ion-row>
+              <ion-row>
+                <input type="text" id="department">
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </fieldset>
+        <items-array formArrayName="items" [itemsFormArray]="newReqForm.get('items')"></items-array>
 
-        <label for="department">Department</label>
-        <input type="text" id="department">
-      </fieldset>
 
-      <table>
-        <thead>
-          <th>Matric Part #</th>
-          <th>Quantity</th>
-          <th>Lot #</th>
-          <th>Reason Code</th>
-          <th>Operation</th>
-          <th>Action</th>
-        </thead>
-        <tbody *ngFor="let item of itemsFormArray">
-          <td>{{item.matricPN}}</td>
-          <td>{{item.quantity}}</td>
-          <td>{{item.lotNum}}</td>
-          <td>{{item.reasonCode}}</td>
-          <td>{{item.operation}}</td>
-          <td>
-            <button (click)="removeItem(item)">X</button>
-          </td>
-        </tbody>
-        <tfoot>
-          <items-array formArrayName="items" [itemsFormArray]="newReqForm.get('items')">
-          </items-array>
-        </tfoot>
-
-      </table>
-
-      <button type="submit" class="btn btn-success">Submit</button>
-    </form>
-  </div>
-
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+    </div>
+  </ion-grid>
 </ion-content>
