@@ -1,0 +1,29 @@
+<div class="form-group row" [formGroup]="item">
+  <div class="col-sm-6">
+    <label [attr.for]="'matricPN'+index">Matric Part #</label>
+    <input type="text" [attr.id]="'matricPN'+index" formControlName="matricPN">
+  </div>
+  <div class="col-sm-5">
+    <label [attr.for]="'quantity'+index">Quantity</label>
+    <input type="number" [attr.id]="'quantity'+index" formControlName="quantity">
+  </div>
+  <div class="col-sm-5">
+    <label [attr.for]="'lotNum'+index">Lot #</label>
+    <input type="number" [attr.id]="'lotNum'+index" formControlName="lotNum">
+  </div>
+  <div class="col-sm-5">
+    <label [attr.for]="'reasonCode'+index">Reason Code</label>
+    <select [attr.id]="'reasonCode'+index" formControlName="reasonCode">
+      <option *ngFor="let reasonCode of reasonCodesService.reasonCodes">
+        {{reasonCode.code}} - {{reasonCode.description}}
+      </option>
+    </select>
+  </div>
+  <div class="col-sm-5">
+    <label [attr.for]="'operation'+index">Operation</label>
+    <input type="number" [attr.id]="'operation'+index" formControlName="operation">
+  </div>
+  <div class="col-sm-1 py-1">
+    <button ion-button (click)="removed.emit(index)">Remove</button>
+  </div>
+</div>

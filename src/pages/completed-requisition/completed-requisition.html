@@ -1,0 +1,42 @@
+<!--
+  Generated template for the CompletedRequisitionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Completed Requisitions</ion-title>
+    <ion-buttons ion-nav-buttons>
+      <button ion-button (click)="newReq()">New Requisition</button>
+      <button ion-button (click)="goToOpenReqs()">Open Requisitions</button>
+    </ion-buttons>
+    
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <table>
+      <thead>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Requested On</th>
+        <th>By</th>
+        <th>Manage</th>
+      </thead>
+      <div *ngFor="let req of reqService.requisitions">
+        <tbody *ngIf="req.filled===true">
+          <td>{{req.id}}</td>
+          <td *ngIf="req.job.length == 0; ">Misc. Issue</td>
+          <td *ngIf="req.job.length != 0; ">Job Issue</td>
+          <td>{{req.createDate | date:'shortDate'}}</td>
+          <td>{{req.employee}}</td>
+          <td><button ion-button (click)="manage(req)">Manage</button></td>
+        </tbody>
+      </div>
+    </table>
+
+</ion-content>

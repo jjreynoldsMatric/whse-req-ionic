@@ -1,0 +1,67 @@
+<ion-grid>
+<table>
+  <thead>
+    <ion-row>
+      <ion-col width-20>
+        <th>Matric Part #</th>
+      </ion-col>
+      <ion-col width-10>
+        <th>Quantity</th>
+      </ion-col>
+      <ion-col width-10>
+        <th>Lot #</th>
+      </ion-col>
+      <ion-col width-20>
+        <th>Reason Code</th>
+      </ion-col>
+      <ion-col width-20>
+        <th>Operation</th>
+      </ion-col>
+      <ion-col width-20>
+        <th>Action</th>
+      </ion-col>
+    </ion-row>
+  </thead>
+  <tbody *ngFor="let item of this.items">
+    <td>{{item.matricPN}}</td>
+    <td>{{item.quantity}}</td>
+    <td>{{item.lotNum}}</td>
+    <td>{{item.reasonCode}}</td>
+    <td>{{item.operation}}</td>
+    <td><button (click)="removeItem(item)">X</button></td>
+  </tbody>
+  <tfoot>
+    <form #itemForm="ngForm">
+      <ion-row>
+        <ion-col width-20>
+          <label for="matricPN">Part Number</label>
+          <input type="text" id="matricPN" name="matricPN" [(ngModel)]="matricPN">
+        </ion-col>
+        <ion-col width-10>
+          <label for="quantity">Quantity</label>
+          <input type="text" id="quantity" name="quantity" [(ngModel)]="quantity">
+        </ion-col>
+        <ion-col width-10>
+      <label for="lotNum">Lot Number</label>
+      <input type="text" id="lotNum" name="lotNum" [(ngModel)]="lotNum">
+        </ion-col>
+        <ion-col width-20>
+      <label for="reasonCode">Reason Code</label>
+      <select class="form-control" id="reasonCode" required [(ngModel)]="reasonCode" name="reasonCode">
+        <option *ngFor="let reasonCode of reasonCodesService.reasonCodes" >
+                {{reasonCode.code}} - {{reasonCode.description}}
+        </option>
+      </select>
+    </ion-col>
+      <ion-col width-20>
+      <label for="operation">Operation</label>
+      <input type="text" id="operation" name="operation" [(ngModel)]="operation">
+    </ion-col>
+    <ion-col width-20>
+      <button ion-button type="submit" (click)="addItem(item)">Add</button>
+    </ion-col>
+    </ion-row>
+    </form>
+  </tfoot>
+</table>
+</ion-grid>

@@ -1,0 +1,7 @@
+<fieldset>
+    <item-form-control
+      *ngFor="let item of itemsFormArray.controls; let i=index"
+      [index]="i" [item]="item" (removed)="itemsFormArray.removeAt($event)">
+    </item-form-control>
+  </fieldset>
+  <button type="button" class="btn btn-link" (click)="addItem()">Add another item</button>

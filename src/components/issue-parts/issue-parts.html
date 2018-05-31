@@ -1,0 +1,35 @@
+<ion-content>
+<h3>Issue Parts</h3>
+<p> Are you sure you want to issue parts? Choose your name/employee # and how many you are issuing.</p>
+<div>
+  <form #issuePartsForm="ngForm">
+    <div class="form-group">
+      <label for="employee">Employee</label>
+      <select class="form-control" id="employees" required [(ngModel)]="employee" name="employees">
+          <option *ngFor="let employee of employeeService.employees" [value]="employee.id">
+              {{employee.empNum}} - {{employee.fname}} {{employee.lname}}
+          </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input type="number" id="quantity" [(ngModel)]="quantity" name="quantity">
+    </div>
+
+    <div class="form-group">
+      <label for="chosenLocation">Location</label>
+        <select class="form-control" id="chosenLocation" required [(ngModel)]="chosenLocation" name="chosenLocation">
+          
+            <option *ngFor="let location of this.locationsService.locations" [value]="location">
+                {{location.location}}: {{location.qtyOnHand}}
+            </option>
+          
+        </select>
+      </div>
+
+    <button class="btn btn-success" (click)="cancel()">No</button>
+    <button type="submit" class="btn btn-success" (click)="issueParts(issuePartsForm)">Yes</button>
+
+  </form>
+</div>
+</ion-content>
