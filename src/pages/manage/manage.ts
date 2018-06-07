@@ -2,7 +2,7 @@ import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angu
 
 import { Component, Input } from '@angular/core';
 import { Requisition } from '../../models/requisition';
-import { ItemLocViewModel } from '../../models/locations';
+import { ItemLocViewModel } from '../../models/itemLocViewModel';
 import { Item } from '../../models/item';
 import { Employee } from '../../models/employee';
 import { ReasonCode } from '../../models/reason-code';
@@ -47,16 +47,17 @@ export class ManagePage {
 
   ionViewDidLoad() {
     this.loadLocationTables();
-    console.log(JSON.stringify(this.req));
+    //console.log(JSON.stringify(this.req)); 
   }
   loadLocationTables() {
     this.itemReqId = this.navParams.data.id;
-    this.itemLoc.loadLocations(this.itemReqId);
+    //this.itemLoc.loadLocations(this.itemReqId);
   }
 
   issueParts(item){
+    
     let issuePartsModal = this.modalCtrl.create(IssuePartsComponent, item);
-    console.log("ITEMS: " + JSON.stringify(item));
+    //console.log("ITEMS: " + JSON.stringify(item));
     issuePartsModal.present();
   }
   //THIS MAY NEED CHANGED TO IMPROVE FLOW OF APP. THERE ARE 2 ANIMATIONS GOING ON WHICH MAY SEEM CLUNKY

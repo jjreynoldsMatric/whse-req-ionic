@@ -7,7 +7,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
 import { OpenRequisitionPage } from '../pages/open-requisition/open-requisition';
 import { ManagePage } from '../pages/manage/manage';
 import { CompletedRequisitionPage } from '../pages/completed-requisition/completed-requisition';
@@ -17,21 +16,16 @@ import { EmployeeProvider } from '../providers/employee/employee';
 import { ItemLocationsProvider } from '../providers/item-locations/item-locations';
 import { RequisitionProvider } from '../providers/requisition/requisition';
 import { ReasonCodesProvider } from '../providers/reason-codes/reason-codes';
-import { ItemTableComponent } from '../components/item-table/item-table';
-import { ItemFormArrayComponent } from '../components/item-form-array/item-form-array';
-import { ItemFormControlComponent } from '../components/item-form-control/item-form-control';
+import { ItemFormControlComponent } from '../components/item-form-control/item-form-control'; 
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
     OpenRequisitionPage,
     ManagePage,
     CompletedRequisitionPage,
     IssuePartsComponent,
     NewRequisitionPage,
-    ItemTableComponent,
-    ItemFormArrayComponent,
     ItemFormControlComponent
   ],
   imports: [
@@ -44,14 +38,11 @@ import { ItemFormControlComponent } from '../components/item-form-control/item-f
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
     OpenRequisitionPage,
     ManagePage,
     CompletedRequisitionPage,
     IssuePartsComponent,
     NewRequisitionPage,
-    ItemTableComponent,
-    ItemFormArrayComponent,
     ItemFormControlComponent
   ],
   providers: [

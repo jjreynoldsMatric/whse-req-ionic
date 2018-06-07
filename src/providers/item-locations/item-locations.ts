@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ItemLocViewModel } from '../../models/locations';
+import { ItemLocViewModel } from '../../models/itemLocViewModel';
 
 /*
   Generated class for the ItemLocationsProvider provider.
@@ -14,7 +14,6 @@ export class ItemLocationsProvider {
   locations: any;
 
   constructor(public http: HttpClient) {
-    console.log('Hello ItemLocationsProvider Provider');
   }
   loadLocations(itemReqId) {
     this.http.get('http://localhost:64778/api/requisition/location?itemReqId='+itemReqId).subscribe(response => {

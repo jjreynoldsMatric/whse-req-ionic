@@ -1,4 +1,4 @@
-import { ItemLocViewModel } from "./locations";
+import { ItemLocViewModel } from "./itemLocViewModel";
 import { ReasonCode } from "./reason-code";
 
 export class Item {

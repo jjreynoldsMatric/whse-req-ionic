@@ -18,16 +18,16 @@
     <div>
 
       <form [formGroup]="newReqForm" (ngSubmit)="submit()">
-        <fieldset>
+
           <ion-row>
             <ion-col col-4>
               <ion-row>
                 <label for="employee">Employee</label>
               </ion-row>
               <ion-row style="padding-top: 1px">
-                <select id="employee" name="employee">
-                  <option *ngFor="let employee of employeeService.employees" [value]="employee.id">
-                    {{employee.empNum}} - {{employee.fname}} {{employee.lname}}
+                <select id="employee" name="employee" formControlName="employee">
+                  <option *ngFor="let employee of employeeService.employees" [value]="employee.empFull">
+                    {{employee.empFull}}
                   </option>
                 </select>
               </ion-row>
@@ -37,7 +37,7 @@
                 <label for="job">Job or MR #</label>
               </ion-row>
               <ion-row>
-                <input type="text" id="job" name="job">
+                <input type="text" id="job" name="job" formControlName="job">
               </ion-row>
             </ion-col>
             <ion-col col-4>
@@ -45,16 +45,25 @@
                 <label for="department">Department</label>
               </ion-row>
               <ion-row>
-                <input type="text" id="department">
+                <input type="text" id="department" formControlName="department">
               </ion-row>
             </ion-col>
           </ion-row>
-        </fieldset>
-        <items-array formArrayName="items" [itemsFormArray]="newReqForm.get('items')"></items-array>
 
+          <div formArrayName="requisitionItems">
+            <div *ngFor="let control of newReqForm.controls['requisitionItems'].controls; let i = index">
+              <item-form-control [newReqForm]="newReqForm.controls.requisitionItems.controls[i]"></item-form-control>
+              <button type="button" (click)="removeItem(i)">Remove</button>
+            </div>
+          </div>
+          <button type="button" (click)="addItem()">Add Another Item</button>
+        <!--
+        <items-array formArrayName="requisitionItem" [itemsFormArray]="newReqForm.get('requisitionItem')"></items-array>
 
+        -->
         <button type="submit" class="btn btn-success">Submit</button>
       </form>
+      <p>Form Value: {{newReqForm.value | json}} {{newReqForm.controls.employee.empNum | json}} end</p>
     </div>
   </ion-grid>
 </ion-content>

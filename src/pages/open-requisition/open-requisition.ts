@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Requisition } from '../../models/requisition';
 import { Employee } from '../../models/employee';
 import { Item } from '../../models/item';
-import { ItemLocViewModel } from '../../models/locations';
+import { ItemLocViewModel } from '../../models/itemLocViewModel';
 import { ReasonCode } from '../../models/reason-code'; 
 
 import { ManagePage } from '../manage/manage';
@@ -41,12 +41,12 @@ export class OpenRequisitionPage {
   ionViewDidLoad() {
     this.reqService.loadRequisitions();
     //this.reasonCodes.loadReasonCodes();
-
+    
   }
 
   manage(req: Requisition){
     this.navCtrl.push(ManagePage, req);
-    console.log("MANAGE REQ: " + JSON.stringify(req));
+    //console.log("MANAGE REQ: " + JSON.stringify(req)); 
   }
 
   goToCompletedReqs() {
@@ -55,5 +55,6 @@ export class OpenRequisitionPage {
   newReq() {
     this.navCtrl.push(NewRequisitionPage);
   }
+
 
 }

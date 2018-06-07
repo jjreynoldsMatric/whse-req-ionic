@@ -1,5 +1,7 @@
-export class requisitionItem {
-    itemLocViewModel: any;
+import { ItemLocViewModel } from "./itemLocViewModel";
+
+export class RequisitionItem {
+    itemLocViewModel: ItemLocViewModel;
     id: any;
     requisitionId: any;
 	item: string;

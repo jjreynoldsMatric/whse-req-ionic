@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RequisitionProvider } from '../../providers/requisition/requisition';
 import { Requisition } from '../../models/requisition';
 import { ManagePage } from '../manage/manage';
+import { NewRequisitionPage } from '../new-requisition/new-requisition';
 
 /**
  * Generated class for the CompletedRequisitionPage page.
@@ -23,7 +24,6 @@ export class CompletedRequisitionPage {
 
   ionViewDidLoad() {
     this.reqService.loadRequisitions();
-    console.log('ionViewDidLoad CompletedRequisitionPage');
   }
 
   goToOpenReqs(){
@@ -31,6 +31,9 @@ export class CompletedRequisitionPage {
   }
   manage(req: Requisition){
     this.navCtrl.push(ManagePage, req);
+  }
+  newReq() {
+    this.navCtrl.push(NewRequisitionPage);
   }
 
 }

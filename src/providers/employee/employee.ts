@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Employee } from '../../models/employee';
+import { map } from 'rxjs/operators';
 
 /*
   Generated class for the EmployeeProvider provider.
@@ -11,17 +12,27 @@ import { Employee } from '../../models/employee';
 @Injectable()
 export class EmployeeProvider {
   employees: any;
+  employee: any;
+  i
 
   constructor(public http: HttpClient) {
-    console.log('Hello EmployeeProvider Provider');
   }
 
   loadEmployees() {
-    this.http.get('http://localhost:64778/api/requisition/employees').subscribe(response => {
+    this.http.get('http://localhost:64778/api/requisition/employees').subscribe(response =>{
+      
+    
       this.employees = response;
-      //console.log("RESPONSE: " + JSON.stringify(this.employees));
-    })
-   
+      //console.log(JSON.stringify(this.employees));
+    });
+  }
+
+  mapEmployees(object) {
+    object.
+    object.forEach(element => {
+       return element.empNum + ': ' + element.fname + ' ' + element.lname;
+    });
+   return object;
   }
 
 }

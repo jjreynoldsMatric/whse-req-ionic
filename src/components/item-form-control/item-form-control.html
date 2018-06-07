@@ -1,12 +1,12 @@
-<div class="form-group" [formGroup]="item">
+<div class="form-group" [formGroup]="newReqForm">
   <ion-grid>
     <ion-row>
       <ion-col col-2>
         <ion-row>
-          <label [attr.for]="'matricPN'+index">Matric Part #</label>
+          <label [attr.for]="'item'+index">Matric Part #</label>
         </ion-row>
         <ion-row>
-          <input type="text" [attr.id]="'matricPN'+index" formControlName="matricPN">
+          <input type="text" [attr.id]="item" formControlName="item" >
         </ion-row>
 
       </ion-col>
@@ -16,7 +16,7 @@
         </ion-row>
         <ion-row>
           <ion-col no-padding>
-            <input type="number" [attr.id]="'quantity'+index" formControlName="quantity">
+            <input type="number" [attr.id]="quantity" formControlName="quantity" >
           </ion-col>
 
         </ion-row>
@@ -24,10 +24,10 @@
       </ion-col>
       <ion-col col-2>
         <ion-row>
-          <label [attr.for]="'lotNum'+index">Lot #</label>
+          <label [attr.for]="lotNum">Lot #</label>
         </ion-row>
         <ion-row>
-          <input type="number" [attr.id]="'lotNum'+index" formControlName="lotNum">
+          <input type="number" [attr.id]="lotNum" formControlName="lotNum" >
         </ion-row>
 
       </ion-col>
@@ -36,7 +36,7 @@
           <label [attr.for]="'reasonCode'+index">Reason Code</label>
         </ion-row>
         <ion-row style="padding-top: 1px">
-          <select [attr.id]="'reasonCode'+index" formControlName="reasonCode">
+          <select [attr.id]="reasonCode" formControlName="reasonCode" >
             <option *ngFor="let reasonCode of reasonCodesService.reasonCodes">
               {{reasonCode.code}} - {{reasonCode.description}}
             </option>
@@ -45,15 +45,13 @@
       </ion-col>
       <ion-col col-2>
         <ion-row>
-          <label [attr.for]="'operation'+index">Operation</label>
+          <label [attr.for]="operation">Operation</label>
         </ion-row>
         <ion-row>
-          <input type="number" [attr.id]="'operation'+index" formControlName="operation">
+          <input type="number" [attr.id]="operation" formControlName="operation">
         </ion-row>
       </ion-col>
-      <ion-col col-1>
-        <button ion-button (click)="removed.emit(index)">Remove</button>
-      </ion-col>
+      
     </ion-row>
   </ion-grid>
 </div>
