@@ -1,16 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { RequisitionProvider } from '../../providers/requisition/requisition';
+
 import { Requisition } from '../../models/requisition';
+
 import { ManagePage } from '../manage/manage';
 import { NewRequisitionPage } from '../new-requisition/new-requisition';
 
-/**
- * Generated class for the CompletedRequisitionPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { RequisitionProvider } from '../../providers/requisition/requisition';
 
 @IonicPage()
 @Component({
@@ -30,7 +26,7 @@ export class CompletedRequisitionPage {
     this.navCtrl.popToRoot();
   }
   manage(req: Requisition){
-    this.navCtrl.push(ManagePage, req);
+    this.navCtrl.push(ManagePage, req.id);
   }
   newReq() {
     this.navCtrl.push(NewRequisitionPage);

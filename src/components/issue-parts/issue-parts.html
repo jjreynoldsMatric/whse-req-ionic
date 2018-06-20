@@ -1,69 +1,78 @@
-<ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <h3>Issue Parts</h3>
-      </ion-col>
-    </ion-row>
+
+<ion-header>
+  <ion-title><span style="font-size: 3rem;">Issue Parts</span></ion-title>
+</ion-header>
+
+<ion-content class="no-scroll ">
+  <ion-grid class="no-scroll ">
     <ion-row>
       <ion-col>
         <p> Are you sure you want to issue parts? Choose your name/employee # and how many you are issuing.</p>
       </ion-col>
     </ion-row>
     <ion-row>
-      <form #issuePartsForm="ngForm">
+      <ion-col>
+        <span>Item: {{reqItem.item}}</span>
+      </ion-col>
+      <ion-col>
+        <span>Quantity: {{reqItem.quantityFilled}}/{{reqItem.quantity}}</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <form [formGroup]="issuePartsForm">
         <ion-col >
-          <div class="form-group">
+
             <ion-row>
               <label for="employee">Employee</label>
             </ion-row>
             <ion-row>
-              <select class="form-control" id="employees" required [(ngModel)]="employee" name="employees">
-                <option *ngFor="let employee of employeeService.employees" [value]="employee.empFull">
+              <select id="employee" name="employee" formControlName="employee">
+                <option *ngFor="let employee of employeeService.whseEmployees" [ngValue]="employee.empFull">
                   {{employee.empFull}}
                 </option>
               </select>
             </ion-row>
-          </div>
+
         </ion-col>
         <ion-col>
-          <div class="form-group">
+
             <ion-row>
               <label for="quantity">Quantity</label>
             </ion-row>
             <ion-row>
-              <input type="number" id="quantity" [(ngModel)]="quantity" name="quantity">
+              <input type="number" id="quantity" formControlName="quantity" name="quantity" formControlName="quantity">
             </ion-row>
-          </div>
+
         </ion-col>
         <ion-col>
-          <div class="form-group">
+
             <ion-row>
-              <label for="chosenLocation">Location</label>
+              <label for="location">Location</label>
             </ion-row>
             <ion-row>
-              <select class="form-control" id="chosenLocation" required [(ngModel)]="loc" name="chosenLocation">
-                <option *ngFor="let location of this.locationsService.locations" [value]="location.location">
-                  {{location.location}}: {{location.qtyOnHand}}
+              <select  id="location" formControlName="location" name="location">
+                <option *ngFor="let location of this.locationsService.lots" [ngValue]="location">
+                  {{location.location}}: {{location.qtyOnHand}} from lot #: {{location.lot}}
                 </option>
               </select>
             </ion-row>
-          </div>
+
         </ion-col>
       </form>
     </ion-row>
     <ion-row>
       <ion-col>
-        <button class="btn btn-success" (click)="cancel()">Cancel</button>
+        <button ion-button color="danger" class="btn btn-success" (click)="cancel()">Cancel</button>
       </ion-col>
       <ion-col>
-        <button type="submit" class="btn btn-success" (click)="issueParts(issuePartsForm)">Yes</button>
+        <button ion-button type="submit" style="background-color: #2DF7C4; color: #008060;" class="btn btn-success" (click)="issueParts()"[disabled]="!issuePartsForm.valid">Yes</button>
+       <!-- <button ion-button type="button" (click)="getIssuePartsForm()">GET IP FORM</button>-->
       </ion-col>
 
 
     </ion-row>
 
-    
+    <h1 style="color: red">{{this.error}}</h1>
 
   </ion-grid>
 

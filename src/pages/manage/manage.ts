@@ -1,24 +1,17 @@
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-
 import { Component, Input } from '@angular/core';
-import { Requisition } from '../../models/requisition';
+
+import { Requisition } from '../../models/models';
 import { ItemLocViewModel } from '../../models/itemLocViewModel';
 import { Item } from '../../models/item';
 import { Employee } from '../../models/employee';
 import { ReasonCode } from '../../models/reason-code';
+
 import { IssuePartsComponent } from '../../components/issue-parts/issue-parts';
-import { ItemLocationsProvider } from '../../providers/item-locations/item-locations';
 import { CompletedRequisitionPage } from '../completed-requisition/completed-requisition';
 import { NewRequisitionPage } from '../new-requisition/new-requisition';
 
-
-
-/**
- * Generated class for the ManagePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { RequisitionProvider } from '../../providers/requisition/requisition';
 
 @IonicPage()
 @Component({
@@ -28,6 +21,7 @@ import { NewRequisitionPage } from '../new-requisition/new-requisition';
 export class ManagePage {
 
   @Input() requesition: Requisition;
+
  
   req: Requisition;
   employee: Employee;
@@ -37,29 +31,52 @@ export class ManagePage {
   reasonCode: ReasonCode;
   itemReqId: any;
   
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider) {
+    
+    this.itemReqId = this.navParams.data;
+  
 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private itemLoc: ItemLocationsProvider) {
-    this.req = this.navParams.data;
-    //this.locations = this.navParams.data.requisitionItem.itemLocViewModel;
-   
   }
+/*
+  ngOnInit() {
+    
+    this.reqService.getRequisition(this.itemReqId).subscribe(data => {
+      this.req = data;
+    });
+  }*/
 
+  
   ionViewDidLoad() {
-    this.loadLocationTables();
-    //console.log(JSON.stringify(this.req)); 
+
+   // console.log(JSON.stringify(this.req)); 
   }
-  loadLocationTables() {
-    this.itemReqId = this.navParams.data.id;
-    //this.itemLoc.loadLocations(this.itemReqId);
+  
+  ionViewWillEnter() {
+    console.log("PAGE IS ENTERING");
+    this.reqService.getRequisition(this.itemReqId).subscribe(data => {
+      this.req = data;
+      console.log("***************************")
+      console.log(this.req)
+      console.log("***************************")
+    });
   }
 
   issueParts(item){
     
     let issuePartsModal = this.modalCtrl.create(IssuePartsComponent, item);
-    //console.log("ITEMS: " + JSON.stringify(item));
+  
     issuePartsModal.present();
+    this.reqService.loadRequisitions();
+    issuePartsModal.onDidDismiss(data => {
+      console.log(data);
+      if (!Number.isNaN(data) && data !== null){
+        item.quantityFilled += data;
+      }
+     
+    });
   }
+
+  
   //THIS MAY NEED CHANGED TO IMPROVE FLOW OF APP. THERE ARE 2 ANIMATIONS GOING ON WHICH MAY SEEM CLUNKY
   goToNewReq() {
     this.navCtrl.pop();

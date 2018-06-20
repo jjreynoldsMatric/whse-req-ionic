@@ -1,3 +1,36 @@
 issue-parts {
+    ion-header{
+        background-color: #3e8ef7;
 
+            ion-title{
+                color: white;
+                text-align: center;
+                text-decoration: underline; 
+                font-size: 3rem; 
+                              
+            }
+            
+        
+    }
+    ion-content{
+        .scroll-content{
+            overflow: auto;
+            overflow-y: hidden;
+       }
+        
+        ion-grid{
+            
+            ion-row{
+                ion-col{
+                    font-size: 150%;
+                }
+            }
+          
+           
+        }
+        .button{
+            background-color: #2DF7C4;
+            color: #008060;
+        }
+    }
 }

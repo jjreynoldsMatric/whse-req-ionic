@@ -7,11 +7,11 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Manage</ion-title>
+    <ion-title><span style="font-size: 3rem;">Manage</span></ion-title>
     <ion-buttons ion-nav-buttons>
-      <button ion-button (click)="goToNewReq()">New Requisition</button>
-      <button ion-button (click)="goToOpenReqs()">Open Requisitions</button>
-      <button ion-button (click)="goToCompletedReqs()">Completed Requisitions</button>
+      <button ion-button style="font-size: 150%;" (click)="goToNewReq()">New Requisition</button>
+      <button ion-button style="font-size: 150%;" (click)="goToOpenReqs()">Open Requisitions</button>
+      <button ion-button style="font-size: 150%;" (click)="goToCompletedReqs()">Completed Requisitions</button>
     </ion-buttons>
 
   </ion-navbar>
@@ -19,15 +19,17 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-grid>
-    <ion-row>
+<ion-content padding >
+  
+  <ion-grid *ngIf="req" >
+    <ion-row no-padding>
       <ion-col>
-        <div *ngIf="req.job.length == 0; else elseBlock">
+        <div *ngIf="!req.job; else elseBlock">
           <h2>Miscellaneous Issue</h2>
         </div>
         <ng-template #elseBlock>
           <h2>Job Material Issue</h2>
+              <p style="font-size: 100%">Job: {{req.job}}</p>
         </ng-template>
       </ion-col>
     
@@ -35,25 +37,30 @@
         <h2>Warehouse Requisition: {{req.id}}</h2>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <p>Submitted By: {{req.employee}}</p>
-      <div *ngIf="job">{{req.job}}</div>
+    <ion-row align-items-center>
+      <ion-row>
+        <ion-col>
+        <p style="font-size: 100%">Submitted By: {{req.employee}}</p>
+      </ion-col>
+      </ion-row>
+       
+      
+      
     </ion-row>
 
       <ion-row>
-        <ion-col>Matric Part Number</ion-col>
+        <ion-col>Part Number</ion-col>
         <ion-col>Quantity</ion-col>
-        <ion-col>Lot #</ion-col>
         <ion-col>Resource Code</ion-col>
         <ion-col>Operation</ion-col>
         <ion-col>Filled</ion-col>
         <ion-col>Locations</ion-col>
         <ion-col>Action</ion-col>
       </ion-row>
-      <div *ngFor="let item of req.requisitionItem" ion-row>
+
+      <div *ngFor="let item of req.requisitionItem" ion-row align-items-center style="border:1px solid black ; border-radius: 10px; font-size: 120%; font-weight: 500; margin-bottom: 5px">
         <ion-col>{{item.item}}</ion-col>
         <ion-col>{{item.quantity}}</ion-col>
-        <ion-col>{{item.lot}}</ion-col>
         <ion-col>{{item.reasonCode}}</ion-col>
         <ion-col>{{item.operation}}</ion-col>
         <ion-col>{{item.quantityFilled}}/{{item.quantity}}</ion-col>
@@ -62,7 +69,7 @@
           
         </ion-col>
         <ion-col>
-          <button (click)="issueParts(item)">Issue Parts</button>
+          <button ion-button color="secondary" (click)="issueParts(item)">Issue Parts</button>
         </ion-col>
       </div>
 

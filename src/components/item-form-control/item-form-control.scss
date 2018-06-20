@@ -1,3 +1,28 @@
 item-form-control {
+    $grid-columns:               10;
 
+    ion-content{
+        
+        ion-grid{
+            ion-col{
+                margin-left: 10px;
+            }
+            
+            ion-row{
+                
+                label {
+                    font-size: 145%;
+                }
+                select {
+                    font-size: 125%;
+                }
+            }
+          
+           
+        }
+        .button{
+            background-color: #2DF7C4;
+            color: #008060;
+        }
+    }
 }

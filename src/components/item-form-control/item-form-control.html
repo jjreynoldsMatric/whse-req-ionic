@@ -1,16 +1,21 @@
 <div class="form-group" [formGroup]="newReqForm">
   <ion-grid>
     <ion-row>
-      <ion-col col-2>
+      <ion-col>
         <ion-row>
           <label [attr.for]="'item'+index">Matric Part #</label>
         </ion-row>
         <ion-row>
-          <input type="text" [attr.id]="item" formControlName="item" >
+          <input type="text" [attr.id]="item" formControlName="item" (keyup.enter)="enterItem(newReqForm.get('item').value)"
+          (blur)="enterItem(newReqForm.get('item').value)" >
+        </ion-row>
+        
+        <ion-row>
+          <span class="smallspan" [ngStyle]="{'color':this.itemDesc === 'Could not find this item' ? 'red' : 'black' }">{{this.itemDesc}}</span>
         </ion-row>
 
       </ion-col>
-      <ion-col col-2>
+      <ion-col>
         <ion-row>
           <label [attr.for]="'quantity'+index">Quantity</label>
         </ion-row>
@@ -18,40 +23,38 @@
           <ion-col no-padding>
             <input type="number" [attr.id]="quantity" formControlName="quantity" >
           </ion-col>
-
+          
         </ion-row>
-
+<!--[disabled]="this.newReqForm.parent.parent.get('job').value !== ''-->
       </ion-col>
-      <ion-col col-2>
-        <ion-row>
-          <label [attr.for]="lotNum">Lot #</label>
-        </ion-row>
-        <ion-row>
-          <input type="number" [attr.id]="lotNum" formControlName="lotNum" >
-        </ion-row>
-
-      </ion-col>
-      <ion-col col-3>
+      <ion-col>
         <ion-row>
           <label [attr.for]="'reasonCode'+index">Reason Code</label>
         </ion-row>
         <ion-row style="padding-top: 1px">
-          <select [attr.id]="reasonCode" formControlName="reasonCode" >
-            <option *ngFor="let reasonCode of reasonCodesService.reasonCodes">
-              {{reasonCode.code}} - {{reasonCode.description}}
-            </option>
-          </select>
+            <ion-select [attr.id]="reasonCode" formControlName="reasonCode" placeholder="Reason Code" style="max-width: 100% !important" no-padding >
+              <ion-option *ngFor="let reasonCode of reasonCodesService.reasonCodes" >
+                {{reasonCode.code}} - {{reasonCode.description}}
+              </ion-option>
+            </ion-select>        
         </ion-row>
       </ion-col>
-      <ion-col col-2>
+      <ion-col>
         <ion-row>
           <label [attr.for]="operation">Operation</label>
         </ion-row>
         <ion-row>
           <input type="number" [attr.id]="operation" formControlName="operation">
         </ion-row>
+        
       </ion-col>
-      
+      <ion-col>
+        <button type="button" ion-button (click)="removeItem(index)">Remove</button>
+      </ion-col>
+     <!--   <ion-col>
+      <button type="button" ion-button (click)="getFormInfo()">GET FORM</button>
+      </ion-col>
+      -->
     </ion-row>
   </ion-grid>
 </div>

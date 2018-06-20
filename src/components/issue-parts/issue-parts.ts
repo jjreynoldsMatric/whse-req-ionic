@@ -1,64 +1,112 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { NavParams, ToastController, ViewController } from 'ionic-angular';
+
+import { RequisitionItem } from '../../models/requisitionItem';
 import { Employee } from '../../models/employee';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+
 import { EmployeeProvider } from '../../providers/employee/employee';
 import { ItemLocationsProvider } from '../../providers/item-locations/item-locations';
 import { RequisitionProvider } from '../../providers/requisition/requisition';
-import { FormsModule } from '@angular/forms';
-import { RequisitionItem } from '../../models/requisitionItem';
-import { DecimalPipe } from '@angular/common';
-/**
- * Generated class for the IssuePartsComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { PartRequest } from '../../models/partRequest';
+
+
 @Component({
   selector: 'issue-parts',
   templateUrl: 'issue-parts.html'
 })
-export class IssuePartsComponent {
+export class IssuePartsComponent implements OnInit {
   @Input() employees: Employee[];
-  itemReqId: any;
-  quantity: number;
   @Input() reqItem: RequisitionItem;
+ 
+  itemReqId: any;
+
   chosenLocation:any;
   employee: any;
-  loc: any;
-
-  constructor(private navCtrl: NavController, private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController) {
-    //console.log('Hello IssuePartsComponent Component');
-    this.quantity = 0;
-    this.itemReqId = this.navParams.data.id;
-    this.reqItem = this.navParams.data;
-  }
-  presentToast() {
-    
-  }
+  error: any;
+  partRequest: PartRequest;
+  issuePartsForm: FormGroup;
+  
   
 
+  constructor(private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController, public viewCtrl: ViewController,private fb: FormBuilder) {
+
+    this.itemReqId = this.navParams.data.id;
+    this.reqItem = this.navParams.data;
+    
+  }
+
+  ngOnInit(): void {
+
+    this.partRequest = new PartRequest;
+
+    this.issuePartsForm = this.fb.group({
+      employee: ['', Validators.required],
+      quantity: ['', Validators.compose([Validators.required, Validators.pattern("^[0-9]+$")])],
+      location: ['', Validators.required]
+    })
+
+  }
+  
   ionViewDidLoad() {
-    //console.log("Item: " + JSON.stringify(this.navParams.data)); 
-    this.locationsService.loadLocations(this.itemReqId);
-    this.employeeService.loadEmployees();
-  }
+    this.locationsService.loadLocationsWithLot(this.itemReqId);
+    this.employeeService.loadWhseEmployees();
+    
+    console.log(this.locationsService.lots)
+
+    
+  }/*
+  ionViewWillLoad(){
+    this.locationsService.loadLocationsWithLot(this.itemReqId);
+    console.log(this.locationsService.lots)
+  }*/
+
   cancel(){
-    this.navCtrl.pop();
+    this.viewCtrl.dismiss(0);
   }
-  issueParts(issuePartsForm) {
-    //console.log("ISSUE PARTS FORM: " + this.itemReqId + ', ' + this.emp + ', ' + this.quantity + ', ' + JSON.stringify(this.loc));
+  getFormData() {
+    this.partRequest.itemReqId = this.itemReqId;
+    
+    var splitEmp = this.issuePartsForm.get('employee').value.split(':');
+    var empNum = splitEmp[0];
+    this.partRequest.processedBy = empNum.trim();
+    this.partRequest.quantity = this.issuePartsForm.get('quantity').value;
+    this.partRequest.location = this.issuePartsForm.get('location').value.location;
+    //if(this.issuePartsForm.get('location').value.lot !== null){
+      this.partRequest.lot = this.issuePartsForm.get('location').value.lot;
+    //}
+    ///else{
+     // this.partRequest.lot = this.issuePartsForm.get('location').value.lot;
+   // }
+    
+  }
+
+  issueParts() {
+    
     let toast = this.toastCtrl.create({
-      message: 'You have issued ' + this.quantity + " of " + this.reqItem.item + ' from ' + this.loc,
+      message: 'You have issued ' + this.issuePartsForm.get('quantity').value + " of " + this.reqItem.item + ' from ' + this.issuePartsForm.get('location').value.location,
       duration: 3000,
       position: 'top'
     });
-    //console.log("issue parts params: \n ITEMREQID: "+ this.itemReqId + " EMPLOYEE: " + this.employee + " QUANTITY " + this.quantity + " LOCATION " + this.loc )
-    var splitEmp = this.employee.split(':');
-    var empNum = splitEmp[0];
-    //console.log("EmpNum: " + empNum);
-    this.reqService.issueParts(this.itemReqId, empNum,  this.quantity, this.loc);
-    toast.present();
-    this.navCtrl.pop();
-  }
+    this.getFormData();
+    
+    console.log(this.partRequest);
+    this.reqService.issueParts(this.partRequest).subscribe(() => {
+      toast.present();
+      this.viewCtrl.dismiss(this.issuePartsForm.get('quantity').value);
+    }, err => {
+      this.error = JSON.stringify(err.error);
+      
+    });
+    
+    
+  
+  }/* , err => {
+      this.error = JSON.stringify(err);
+      
+    }
+  getIssuePartsForm(){
+    console.log(JSON.stringify(this.loc.lot))
+  }*/
 
 }

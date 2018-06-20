@@ -1,20 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, DateTime } from 'ionic-angular';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ArrayType } from '@angular/compiler/src/output/output_ast';
+
 import { EmployeeProvider } from '../../providers/employee/employee';
 import { ReasonCodesProvider } from '../../providers/reason-codes/reason-codes';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { ItemFormControlComponent } from '../../components/item-form-control/item-form-control';
 import { RequisitionProvider } from '../../providers/requisition/requisition';
-import { ArrayType } from '@angular/compiler/src/output/output_ast';
-import { Requisition } from '../../models/requisition';
+
+import { Requisition } from '../../models/models';
 import { RequisitionItem } from '../../models/requisitionItem';
 
-/**
- * Generated class for the NewRequisitionPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { requiredIf } from '../../validators/requiredIf.validator';
+import { notRequiredIf } from '../../validators/notRequiredIf.validator';
+//import { DISABLED } from '@angular/forms/src/model';
 
 @IonicPage()
 @Component({
@@ -22,99 +20,177 @@ import { RequisitionItem } from '../../models/requisitionItem';
   templateUrl: 'new-requisition.html',
 })
 export class NewRequisitionPage implements OnInit {
-  
+
   @Input() itemsArray: ArrayType[];
-  //matricPN: any;
-  //quantity: any;
-  //lotNum: any;
-  //reasonCode: any;
-  //operation: any;
 
   newReqForm: FormGroup;
- 
-  requisition: Requisition; 
+  index: number;
+  requisition: Requisition;
+  empIndex: number;
+  empDept:any;
+  employee:any;
+  errorMessage: string;
+  newForm: FormGroup;
+  arrayControl: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider) {
+    
     this.itemsArray = [];
     this.requisition = new Requisition;
     this.requisition.requisitionItem = new Array<RequisitionItem>();
+    
 
-
-   
   }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-     
-let newForm = this.fb.group({
+
+    this.newForm = this.fb.group({
       employee: ['', Validators.required],
-      job: '',
-      department: '',
+      job: ['', Validators.compose([Validators.pattern("^[0-9]+$")])],
       requisitionItems: this.fb.array([
         this.initItems(),
-      ])      
+        
+      ])
     });
-    const arrayControl = <FormArray>newForm.controls['requisitionItems'];
+    this.arrayControl = <FormArray>this.newForm.controls['requisitionItems'];
     this.itemsArray.forEach(item => {
       let newItem = this.fb.group({
-        item: ['', Validators.required],
-        quantity: ['', Validators.required],
-        lotNum: [''],
+        item: ['',Validators.required],
+        quantity: ['', Validators.compose([Validators.required, Validators.pattern("^[0-9]+$")])],
         reasonCode: ['', Validators.required],
-        operation: [''],
+        operation: [{value: '', disabled: true}],
       })
-      arrayControl.push(newItem);
-    }); 
-    this.newReqForm = newForm;
+      this.arrayControl.push(newItem);
+      
+    });
+    this.setValidators();
     
     
+    console.log(this.arrayControl);
+  
+    this.newReqForm = this.newForm;
   }
 
   ionViewWillLoad() {
     this.employeeService.loadEmployees();
-    this.reasonCodesService.loadReasonCodes(); 
-    
-
-    //console.log(JSON.stringify(this.employeeService.employees));
+    this.reasonCodesService.loadReasonCodes();
   }
+
+  setValidators() {
+    this.newForm.controls['job'].valueChanges.subscribe(() => {
+      if(this.newForm.controls['job']){
+
+        for(let i=0; i<this.arrayControl.length; i++){
+          this.arrayControl.controls[i].get('operation').enable();
+          this.arrayControl.controls[i].get('operation').setValidators(Validators.compose([Validators.pattern("^[0-9]+$"),Validators.required]));
+          this.arrayControl.controls[i].get('reasonCode').disable();
+        }
+      }
+     
+      if(this.newForm.controls['job'].value == ""){
+        console.log("NO JOB");
+        for(let i=0; i<this.arrayControl.length; i++){
+          this.arrayControl.controls[i].get('operation').disable();
+          this.arrayControl.controls[i].get('reasonCode').enable();
+          this.arrayControl.controls[i].get('reasonCode').setValidators(Validators.required);
+          }
+      }
+    });
+  }
+
   initItems() {
-    return  this.fb.group({
-        item: ['', Validators.required],
-        quantity: ['', Validators.required],
-        lotNum: [''],
-        reasonCode: ['', Validators.required],
-        operation: [''],
-      })
+    
+    return this.fb.group({
+      item: ['', Validators.required],
+      quantity: ['', Validators.required],
+      lot: [''],
+      reasonCode: ['', Validators.required],
+      operation: [{value: '', disabled: true}],
+    });
+    
+  }
+
+  initJobItems() {
+    
+    return this.fb.group({
+      item: ['', Validators.required],
+      quantity: ['', Validators.required],
+      lot: [''],
+      reasonCode: [{value: '', disabled: true}],
+      operation: ['', Validators.required],
+    });
+    
   }
 
   addItem() {
     console.log("Adding an item!");
-    const arrayControl = <FormArray>this.newReqForm.controls['requisitionItems'];
-    arrayControl.push(this.initItems());
+    if(this.newForm.controls['job'].value !== ""){
+      console.log("JOB ITEM");
+      this.arrayControl.push(this.initJobItems());
+    }
+    else{
+      
+      console.log("NORMAL ITEM");
+      this.arrayControl.push(this.initItems());
+    }
+    
   }
 
   removeItem(index: number) {
-    const arrayControl = <FormArray>this.newReqForm.controls['requisitionItems'];
-    arrayControl.removeAt(index);
+
+    this.arrayControl.removeAt(index);
   }
 
-  submit() { 
-    this.requisition.employee = this.newReqForm.get('employee').value;
-    this.requisition.department = this.newReqForm.controls.department.value;
+  getFormData () {
+    this.requisition.employee = this.newReqForm.get('employee').value.empFull;
+    this.requisition.department = this.newReqForm.get('employee').value.empDept;
     this.requisition.job = this.newReqForm.controls.job.value;
 
     let reqitem = <FormArray>this.newReqForm.controls['requisitionItems'];
     this.requisition.requisitionItem = reqitem.value;
-    for (let i=0; i < reqitem.length; i++) {
+    for (let i = 0; i < reqitem.length; i++) {
       this.requisition.requisitionItem[i].item = reqitem.at(i).value.item;
       this.requisition.requisitionItem[i].quantity = reqitem.at(i).value.quantity;
-      this.requisition.requisitionItem[i].lot = reqitem.at(i).value.lotNum;
+      if (reqitem.at(i).value.lot === null) {
+        this.requisition.requisitionItem[i].lot = 0;
+      }
+
       this.requisition.requisitionItem[i].reasonCode = reqitem.at(i).value.reasonCode;
-      this.requisition.requisitionItem[i].operation = reqitem.at(i).value.operation;
+      if (reqitem.at(i).value.operation === null) {
+        this.requisition.requisitionItem[i].operation = 0;
+      }
+      
     }
-    
-    //console.log(this.requisition);
-    this.reqService.saveRequisition(this.requisition);
+  }
+
+  submit() {
+    this.getFormData();
+    console.log(this.requisition)
+    this.reqService.saveRequisition(this.requisition).subscribe(response => {
+      console.log("Should have posted the req");
+      this.navCtrl.pop();
+    }, err => {
+      this.errorMessage = err.error;
+    });
+    /*
+, err => {
+      this.errorMessage = JSON.stringify(err);
+    }
+    */
+    this.reqService.loadRequisitions();
+  }
+  onSelectChange(employee) {
+    let index = this.empIndex;
+    console.log("ONSELECTCHANGE INDEX" + index) 
+  }
+
+  getFormInfo() {
+    let formInfo = this.newReqForm.get('employee').value.empDept;
+    let index = this.empIndex;
+    console.log("EMP DEPT : " + this.empDept);
+    console.log("EMP INDEX : " + index);
+    console.log(formInfo)
   }
 
 }

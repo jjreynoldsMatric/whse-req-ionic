@@ -7,10 +7,10 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Completed Requisitions</ion-title>
+    <ion-title><span style="font-size: 3rem;">Completed Requisitions</span></ion-title>
     <ion-buttons ion-nav-buttons>
-      <button ion-button (click)="newReq()">New Requisition</button>
-      <button ion-button (click)="goToOpenReqs()">Open Requisitions</button>
+      <button ion-button style="font-size: 150%;" (click)="newReq()">New Requisition</button>
+      <button ion-button style="font-size: 150%;" (click)="goToOpenReqs()">Open Requisitions</button>
     </ion-buttons>
     
   </ion-navbar>
@@ -28,17 +28,20 @@
           <ion-col>Manage</ion-col>
         </ion-row>
     
-        <div *ngFor="let req of reqService.requisitions">
-          <div *ngIf="req.filled===true" ion-row>
-            <ion-col>{{req.id}}</ion-col>
-            <ion-col *ngIf="req.job.length == 0; ">Misc. Issue</ion-col>
-            <ion-col *ngIf="req.job.length != 0; ">Job Issue</ion-col>
-            <ion-col>{{req.createDate | date:'shortDate'}}</ion-col>
-            <ion-col>{{req.employee}}</ion-col>
-            <ion-col>
-              <button ion-button (click)="manage(req)">Manage</button>
-            </ion-col>
-          </div>
+        <div *ngFor="let req of reqService.requisitions; let i = index" >
+            <div *ngIf="req.filled===true" style="padding-bottom: 10px;">
+            <div *ngIf="req.filled===true" ion-row align-items-center style="border:1px solid black ; border-radius: 10px; font-size: 120%; font-weight: 500">
+              <ion-col>{{req.id}}</ion-col>
+              <ion-col *ngIf="req.job.length == 0; ">Misc. Issue</ion-col>
+              <ion-col *ngIf="req.job.length != 0; ">Job Issue</ion-col>
+              <ion-col>{{req.createDate | date:'shortDate'}}</ion-col>
+              <ion-col>{{req.employee}}</ion-col>
+              <ion-col>
+                <button ion-button color="secondary"  (click)="manage(req)">Manage</button>
+               <!--color="secondary" <button ion-button (click)="deleteReq(req)">Delete</button>-->
+              </ion-col>
+            </div>
+            </div>
         </div>
       </ion-grid>
     

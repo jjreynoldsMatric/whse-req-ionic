@@ -1,19 +1,17 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { errorHandler } from '@angular/platform-browser/src/browser';
+import { PartRequest } from '../../models/partRequest';
 
-/*
-  Generated class for the RequisitionProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class RequisitionProvider {
 
+  req: any;
   requisitions: Object;
+  errorMessage: string;
 
-  constructor(public http: HttpClient) {
-  }
+  constructor(public http: HttpClient) { }
 
   loadRequisitions() {
     this.http.get('http://localhost:64778/api/requisition/all').subscribe(response => {
@@ -23,21 +21,29 @@ export class RequisitionProvider {
   }
 
   saveRequisition(requisition) {
-    this.http.post('http://localhost:64778/api/requisition/save', requisition).subscribe(response => {
-      console.log("Should have posted the req");
-    });
+    return this.http.post('http://localhost:64778/api/requisition/save', requisition);
   }
 
-  createShortage(itemReqId, processedBy, quantity) {
-    this.http.post('http://localhost:64778/api/requisition/shortage', {itemReqId: itemReqId, processedBy: processedBy, quantity: quantity}).subscribe(response => {
+  createShortage(itemReqId, processedBy, quantity, loc, lot) {
+    this.http.post('http://localhost:64778/api/requisition/shortage', {itemReqId: itemReqId, processedBy: processedBy, quantity: quantity, location: loc, lot: lot}).subscribe(response => {
     console.log("Created Shortage");
     });
   }
 
-  issueParts(itemReqId, emp, quantity, loc) {
-    this.http.post('http://localhost:64778/api/requisition/issue', {itemReqId: itemReqId, processedBy: emp, quantity: quantity, location: loc}).subscribe(response => {
-      console.log("Issued Parts");
-    });
+  issueParts(partRequest: PartRequest) {
+    return this.http.post('http://localhost:64778/api/requisition/issue', partRequest);
   }
+
+  deleteReq(itemReqId) {
+    this.http.post('http://localhost:64778/api/requisition/DeleteReq', {itemReqId: itemReqId}).subscribe(response => {
+      console.log("Deleted Req " + itemReqId);
+    })
+  }
+  getRequisition(itemReqId) : Observable<any> {
+    let params = new HttpParams().set("itemReqId", itemReqId);
+    return this.http.get('http://localhost:64778/api/requisition/GetReq',{params: params});
+    
+  }
+ 
 
 }

@@ -16,7 +16,8 @@ import { EmployeeProvider } from '../providers/employee/employee';
 import { ItemLocationsProvider } from '../providers/item-locations/item-locations';
 import { RequisitionProvider } from '../providers/requisition/requisition';
 import { ReasonCodesProvider } from '../providers/reason-codes/reason-codes';
-import { ItemFormControlComponent } from '../components/item-form-control/item-form-control'; 
+import { ItemFormControlComponent } from '../components/item-form-control/item-form-control';
+import { ItemsProvider } from '../providers/items/items'; 
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ItemFormControlComponent } from '../components/item-form-control/item-f
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -53,7 +55,8 @@ import { ItemFormControlComponent } from '../components/item-form-control/item-f
     HttpClient,
     ItemLocationsProvider,
     RequisitionProvider,
-    ReasonCodesProvider
+    ReasonCodesProvider,
+    ItemsProvider
   ]
 })
 export class AppModule {}

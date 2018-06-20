@@ -1,4 +1,3 @@
-import { Item } from "./item";
 import { Employee } from "./employee";
 import { RequisitionItem } from "./requisitionItem";
 
@@ -7,7 +6,7 @@ export class Requisition {
     id: number;
     employee: Employee;
     department: number;
-    job: number;
+    job: string;
     filled:boolean; 
     createDate: number;
 }

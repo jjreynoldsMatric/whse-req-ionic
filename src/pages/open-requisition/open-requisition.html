@@ -7,10 +7,11 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Open Requisitions</ion-title>
-    <ion-buttons ion-nav-buttons ion-buttons-end>
-      <button ion-button (click)="newReq()">New Requisition</button>
-      <button ion-button (click)="goToCompletedReqs()">Completed Requisitions</button>
+    <ion-title>
+      <span style="font-size: 3rem;">Open Requisitions</span> </ion-title>
+    <ion-buttons ion-nav-buttons>
+      <button ion-button style="font-size: 150%;" (click)="newReq()">New Requisition</button>
+      <button  ion-button style="font-size: 150%;" (click)="goToCompletedReqs()">Completed Requisitions</button>
     </ion-buttons>
 
   </ion-navbar>
@@ -20,7 +21,7 @@
 
 <ion-content padding>
   <ion-grid>
-    <ion-row>
+    <ion-row justify-content-center>
       <ion-col>ID</ion-col>
       <ion-col>Type</ion-col>
       <ion-col>Requested On</ion-col>
@@ -28,17 +29,20 @@
       <ion-col>Manage</ion-col>
     </ion-row>
 
-    <div *ngFor="let req of reqService.requisitions">
-      <div *ngIf="req.filled===false" ion-row>
+    <div *ngFor="let req of reqService.requisitions; let i = index" >
+        <div *ngIf="req.filled===false" style="padding-bottom: 10px;">
+      <div *ngIf="req.filled===false" ion-row align-items-center justify-content-center style="border:1px solid black ; border-radius: 10px; font-size: 120%; font-weight: 500; " >
         <ion-col>{{req.id}}</ion-col>
         <ion-col *ngIf="req.job.length == 0; ">Misc. Issue</ion-col>
         <ion-col *ngIf="req.job.length != 0; ">Job Issue</ion-col>
         <ion-col>{{req.createDate | date:'shortDate'}}</ion-col>
         <ion-col>{{req.employee}}</ion-col>
         <ion-col>
-          <button ion-button (click)="manage(req)">Manage</button>
+          <button ion-button color="secondary"  (click)="manage(req)">Manage</button>
+         <!--color="secondary" <button ion-button (click)="deleteReq(req)">Delete</button>-->
         </ion-col>
       </div>
+    </div>
     </div>
   </ion-grid>
 

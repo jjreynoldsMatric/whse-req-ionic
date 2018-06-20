@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ReasonCode } from '../../models/reason-code';
+import { Component, Input } from '@angular/core';
+import { FormGroup, FormArray } from '@angular/forms';
+
 import { ReasonCodesProvider } from '../../providers/reason-codes/reason-codes';
-import { ItemLocViewModel } from '../../models/itemLocViewModel';
-import { ArrayType } from '@angular/compiler/src/output/output_ast';
+
+import { ItemsProvider } from '../../providers/items/items';
 
 /**
  * Generated class for the ItemFormControlComponent component.
@@ -18,32 +18,34 @@ import { ArrayType } from '@angular/compiler/src/output/output_ast';
 export class ItemFormControlComponent {
 
   @Input() newReqForm: FormGroup;
+  @Input() index: number;
+  itemDesc: any;
+  opRequired: boolean;
 
-constructor(private reasonCodesService: ReasonCodesProvider) {
+  constructor(private reasonCodesService: ReasonCodesProvider, private itemServ: ItemsProvider) {
     this.reasonCodesService.loadReasonCodes();
   }
-/*
-  @Input()
-  public index: number; 
 
-  @Input()
-  public item: FormGroup;
-
-  @Output()
-  public removed: EventEmitter<number> = new EventEmitter<number>();
-
-  
-
-  static buildItem(matricPN: string, quantity: number, lotNum: number, reasonCode: ReasonCode, operation: number) {
-    return new FormGroup({
-      itemLocViewModel: new FormControl(ItemLocViewModel),
-      matricPN: new FormControl(matricPN, Validators.required),
-      quantity: new FormControl(quantity, Validators.required),
-      lotNum: new FormControl(lotNum),
-      reasonCode: new FormControl('', Validators.required),
-      operation: new FormControl(operation),
-      
-    })
+  enterItem(item: string) {
+    if (item) {
+      this.itemServ.getItemDescription(item).subscribe(res => {
+        this.itemDesc = res.toString();
+      }, err => {
+        this.itemDesc = "Could not find this item";
+      }
+      );
+    }
   }
-*/
+
+  getFormInfo() {
+    let formInfo = this.newReqForm.parent.parent.get('job').value;
+    console.log("FORM INFO: " + JSON.stringify(formInfo))
+  }
+
+  removeItem(index) {
+    const arrayControl = <FormArray>this.newReqForm.parent;
+    arrayControl.removeAt(this.index)
+  }
+
+
 }
