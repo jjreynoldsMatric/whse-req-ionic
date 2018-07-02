@@ -10,14 +10,20 @@ import { RequisitionProvider } from '../../providers/requisition/requisition';
 import { Requisition } from '../../models/models';
 import { RequisitionItem } from '../../models/requisitionItem';
 
+/**
+ * Generated class for the EditPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
 @IonicPage()
 @Component({
-  selector: 'page-new-requisition',
-  templateUrl: 'new-requisition.html',
+  selector: 'page-edit',
+  templateUrl: 'edit.html',
 })
-export class NewRequisitionPage implements OnInit {
-
+export class EditPage implements OnInit {
+  
   @Input() itemsArray: ArrayType[];
 
   newReqForm: FormGroup;
@@ -29,42 +35,43 @@ export class NewRequisitionPage implements OnInit {
   errorMessage: string;
   newForm: FormGroup;
   arrayControl: any;
+  editReq: Requisition;
+  editRI: RequisitionItem[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider) {
-    
+    this.editReq = this.navParams.data;
+    this.editRI = this.editReq.requisitionItem
     this.itemsArray = [];
     this.requisition = new Requisition;
     this.requisition.requisitionItem = new Array<RequisitionItem>();
     
-
   }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
 
     this.newForm = this.fb.group({
-      employee: ['', Validators.required],
-      job: ['', Validators.compose([Validators.pattern("^[0-9]+$")])],
+      employee: [this.editReq.employee, Validators.required],
+      job: [this.editReq.job, Validators.compose([Validators.pattern("^[0-9]+$")])],
       requisitionItems: this.fb.array([
-        this.initItems(),
-        
+       
       ])
     });
     this.arrayControl = <FormArray>this.newForm.controls['requisitionItems'];
-    this.itemsArray.forEach(item => {
+    this.editRI.forEach(item => {
       let newItem = this.fb.group({
-        item: ['',Validators.required],
-        quantity: ['', Validators.compose([Validators.required, Validators.pattern("^[0-9]+$")])],
-        reasonCode: ['', Validators.required],
-        operation: [{value: '', disabled: true}],
+        item: [item.item ,Validators.required],
+        quantity: [item.quantity, Validators.compose([Validators.required, Validators.pattern("^[0-9]+$")])],
+        reasonCode: [item.reasonCode],
+        operation: [item.operation],
       })
       this.arrayControl.push(newItem);
-      
+      this.setValidators()
     });
     this.setValidators();
     
     
-    console.log(this.arrayControl);
+    console.log(this.editReq);
   
     this.newReqForm = this.newForm;
   }
@@ -99,7 +106,7 @@ export class NewRequisitionPage implements OnInit {
   initItems() {
     
     return this.fb.group({
-      item: ['', Validators.required],
+      item: [ '', Validators.required],
       quantity: ['', Validators.required],
       lot: [''],
       reasonCode: ['', Validators.required],
@@ -140,22 +147,39 @@ export class NewRequisitionPage implements OnInit {
   }
 
   getFormData () {
-    this.requisition.employee = this.newReqForm.get('employee').value.empFull;
-    this.requisition.department = this.newReqForm.get('employee').value.empDept;
+    console.log(this.requisition);
+    console.log(this.editReq);
+    
+    this.requisition.id = this.editReq.id;
+    this.requisition.employee = this.editReq.employee;
+    this.requisition.department = this.editReq.department;
     this.requisition.job = this.newReqForm.controls.job.value;
-
+    this.requisition.filled = this.editReq.filled;
     let reqitem = <FormArray>this.newReqForm.controls['requisitionItems'];
     this.requisition.requisitionItem = reqitem.value;
     for (let i = 0; i < reqitem.length; i++) {
+      /*
+      if (this.editReq.requisitionItem[i].id !== null){
+        this.requisition.requisitionItem[i].id = this.editReq.requisitionItem[i].id;
+      }*/
+      
       this.requisition.requisitionItem[i].item = reqitem.at(i).value.item;
       this.requisition.requisitionItem[i].quantity = reqitem.at(i).value.quantity;
-      if (reqitem.at(i).value.lot === null) {
-        this.requisition.requisitionItem[i].lot = 0;
+      this.requisition.requisitionItem[i].quantityFilled = reqitem.at(i).value.quantityFilled;
+      if (this.editReq.requisitionItem[i].filled === undefined){
+        this.editReq.requisitionItem[i].filled = false;
       }
+      this.requisition.requisitionItem[i].filled = this.editReq.requisitionItem[i].filled;
+      this.requisition.requisitionItem[i].itemDescription = this.editReq.requisitionItem[i].itemDescription;
+      this.requisition.requisitionItem[i].lot = this.editReq.requisitionItem[i].lot;
+      
 
       this.requisition.requisitionItem[i].reasonCode = reqitem.at(i).value.reasonCode;
       if (reqitem.at(i).value.operation === null) {
         this.requisition.requisitionItem[i].operation = 0;
+      }
+      else{
+        this.requisition.requisitionItem[i].operation = this.editReq.requisitionItem[i].operation;
       }
       
     }
@@ -164,17 +188,13 @@ export class NewRequisitionPage implements OnInit {
   submit() {
     this.getFormData();
     console.log(this.requisition)
-    this.reqService.saveRequisition(this.requisition).subscribe(response => {
+    this.reqService.updateRequisition(this.requisition).subscribe(response => {
       console.log("Should have posted the req");
       this.navCtrl.pop();
     }, err => {
       this.errorMessage = err.error;
     });
-    /*
-, err => {
-      this.errorMessage = JSON.stringify(err);
-    }
-    */
+    
     this.reqService.loadRequisitions();
   }
   onSelectChange(employee) {

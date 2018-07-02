@@ -20,13 +20,15 @@
 
 <ion-content padding>
     <ion-grid>
-        <ion-row>
+      
+        <ion-row >
           <ion-col>ID</ion-col>
           <ion-col>Type</ion-col>
           <ion-col>Requested On</ion-col>
-          <ion-col>By</ion-col>
+          <ion-col>Requested By</ion-col>
           <ion-col>Manage</ion-col>
         </ion-row>
+
     
         <div *ngFor="let req of reqService.requisitions; let i = index" >
             <div *ngIf="req.filled===true" style="padding-bottom: 10px;">

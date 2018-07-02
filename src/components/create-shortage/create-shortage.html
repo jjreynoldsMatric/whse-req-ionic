@@ -1,0 +1,83 @@
+
+<ion-header>
+  <ion-title><span style="font-size: 3rem;">Create Shortage</span></ion-title>
+</ion-header>
+
+<ion-content class="no-scroll ">
+  <ion-grid class="no-scroll ">
+      <ion-row>
+          <ion-col>
+            <h2 style="padding-bottom: 0px; margin-bottom: 0px;">WARNING</h2>
+          </ion-col>
+        </ion-row>
+    <ion-row>
+      <ion-col>
+        <p style="padding-top: 0; margin-top: 0px;">YOU ARE ISSUING PARTS FROM A LOCATION WHERE THE QUANTITY ON HAND IS ZERO (0)</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <span>Item: {{reqItem.item}}</span>
+      </ion-col>
+      <ion-col>
+        <span>Quantity: {{reqItem.quantityFilled}}/{{reqItem.quantity}}</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <form [formGroup]="issuePartsForm">
+        <ion-col >
+
+            <ion-row>
+              <label for="employee">Employee</label>
+            </ion-row>
+            <ion-row>
+              <select id="employee" name="employee" formControlName="employee">
+                <option *ngFor="let employee of employeeService.whseEmployees" [ngValue]="employee.empFull">
+                  {{employee.empFull}}
+                </option>
+              </select>
+            </ion-row>
+
+        </ion-col>
+        <ion-col>
+
+            <ion-row>
+              <label for="quantity">Quantity</label>
+            </ion-row>
+            <ion-row>
+              <input type="number" id="quantity" formControlName="quantity" name="quantity" formControlName="quantity">
+            </ion-row>
+
+        </ion-col>
+        <ion-col>
+
+            <ion-row>
+              <label for="location">Location</label>
+            </ion-row>
+            <ion-row>
+              <select  id="location" formControlName="location" name="location">
+                <option *ngFor="let location of this.shortageLocs" [ngValue]="location">
+                  {{location.location}}: {{location.qtyOnHand}} from lot #: {{location.lot}}
+                </option>
+              </select>
+            </ion-row>
+
+        </ion-col>
+      </form>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="danger" class="btn btn-success" (click)="cancel()">Cancel</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button type="submit" class="btn btn-success" (click)="createShortage()"[disabled]="!issuePartsForm.valid">Yes</button>
+      </ion-col>
+
+
+    </ion-row>
+
+    <h1 style="color: red">{{this.error}}</h1>
+
+  </ion-grid>
+
+</ion-content>

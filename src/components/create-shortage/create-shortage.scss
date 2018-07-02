@@ -1,6 +1,7 @@
-page-manage {
+create-shortage {
     ion-header{
-        ion-navbar{
+        background-color: #ff0000;
+
             ion-title{
                 color: white;
                 text-align: center;
@@ -9,18 +10,26 @@ page-manage {
                               
             }
             
-        }
+        
     }
     ion-content{
+        h2 {
+            color: red;
+            text-align: center;
+            font-weight: 700;
+        }
+        p {
+            color: #ff0000;
+            text-align: center;
+        }
         .scroll-content{
             overflow: auto;
-        }
+            overflow-y: hidden;
+       }
+        
         ion-grid{
             
             ion-row{
-
-
-
                 ion-col{
                     font-size: 150%;
                 }
@@ -29,7 +38,8 @@ page-manage {
            
         }
         .button{
-            color: #008060;
+            background-color: #ff0000;
+            color: #000000;
         }
     }
 }

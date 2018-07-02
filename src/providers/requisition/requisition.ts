@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { errorHandler } from '@angular/platform-browser/src/browser';
 import { PartRequest } from '../../models/partRequest';
 
 @Injectable()
@@ -24,10 +23,8 @@ export class RequisitionProvider {
     return this.http.post('http://localhost:64778/api/requisition/save', requisition);
   }
 
-  createShortage(itemReqId, processedBy, quantity, loc, lot) {
-    this.http.post('http://localhost:64778/api/requisition/shortage', {itemReqId: itemReqId, processedBy: processedBy, quantity: quantity, location: loc, lot: lot}).subscribe(response => {
-    console.log("Created Shortage");
-    });
+  createShortage(partRequest: PartRequest) {
+    return this.http.post('http://localhost:64778/api/requisition/shortage', partRequest);
   }
 
   issueParts(partRequest: PartRequest) {
@@ -35,15 +32,18 @@ export class RequisitionProvider {
   }
 
   deleteReq(itemReqId) {
-    this.http.post('http://localhost:64778/api/requisition/DeleteReq', {itemReqId: itemReqId}).subscribe(response => {
-      console.log("Deleted Req " + itemReqId);
-    })
+    let params = new HttpParams().set("itemReqId", itemReqId);
+    console.log("PARAMs: " + params)
+    return this.http.delete(`http://localhost:64778/api/requisition/DeleteReq/`, {params: params});
+   
   }
   getRequisition(itemReqId) : Observable<any> {
     let params = new HttpParams().set("itemReqId", itemReqId);
     return this.http.get('http://localhost:64778/api/requisition/GetReq',{params: params});
     
   }
- 
+  updateRequisition(requisition) {
+    return this.http.patch('http://localhost:64778/api/requisition/update', requisition);
+  }
 
 }

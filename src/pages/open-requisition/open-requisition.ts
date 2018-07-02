@@ -12,7 +12,7 @@ import { RequisitionProvider } from '../../providers/requisition/requisition';
 @IonicPage()
 @Component({
   selector: 'page-open-requisition',
-  templateUrl: 'open-requisition.html',
+  templateUrl: 'open-requisition.html'
 })
 export class OpenRequisitionPage {
 
@@ -38,10 +38,6 @@ export class OpenRequisitionPage {
 
   newReq() {
     this.navCtrl.push(NewRequisitionPage);
-  }
-
-  deleteReq(req: Requisition) {
-    this.reqService.deleteReq(req.id);
   }
 
 

@@ -1,4 +1,4 @@
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { Component, Input } from '@angular/core';
 
 import { Requisition } from '../../models/models';
@@ -12,17 +12,20 @@ import { CompletedRequisitionPage } from '../completed-requisition/completed-req
 import { NewRequisitionPage } from '../new-requisition/new-requisition';
 
 import { RequisitionProvider } from '../../providers/requisition/requisition';
+import { CreateShortageComponent } from '../../components/create-shortage/create-shortage';
+import { EditPage } from '../edit/edit';
+import { ConfirmComponent } from '../../components/confirm/confirm';
 
 @IonicPage()
 @Component({
   selector: 'page-manage',
-  templateUrl: 'manage.html',
+  templateUrl: 'manage.html'
 })
 export class ManagePage {
 
   @Input() requesition: Requisition;
 
- 
+
   req: Requisition;
   employee: Employee;
   items: Item[];
@@ -30,27 +33,27 @@ export class ManagePage {
   today: number;
   reasonCode: ReasonCode;
   itemReqId: any;
-  
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider) {
-    
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider, public toastCtrl: ToastController) {
+
     this.itemReqId = this.navParams.data;
-  
+
 
   }
-/*
-  ngOnInit() {
-    
-    this.reqService.getRequisition(this.itemReqId).subscribe(data => {
-      this.req = data;
-    });
-  }*/
+  /*
+    ngOnInit() {
+      
+      this.reqService.getRequisition(this.itemReqId).subscribe(data => {
+        this.req = data;
+      });
+    }*/
 
-  
+
   ionViewDidLoad() {
 
-   // console.log(JSON.stringify(this.req)); 
+    // console.log(JSON.stringify(this.req)); 
   }
-  
+
   ionViewWillEnter() {
     console.log("PAGE IS ENTERING");
     this.reqService.getRequisition(this.itemReqId).subscribe(data => {
@@ -61,22 +64,37 @@ export class ManagePage {
     });
   }
 
-  issueParts(item){
-    
+  issueParts(item) {
+
     let issuePartsModal = this.modalCtrl.create(IssuePartsComponent, item);
-  
+
     issuePartsModal.present();
     this.reqService.loadRequisitions();
     issuePartsModal.onDidDismiss(data => {
       console.log(data);
-      if (!Number.isNaN(data) && data !== null){
+      if (!Number.isNaN(data) && data !== null) {
         item.quantityFilled += data;
       }
-     
+
     });
   }
 
-  
+  createShortage(item) {
+
+    let createShortageModal = this.modalCtrl.create(CreateShortageComponent, item);
+
+    createShortageModal.present();
+    this.reqService.loadRequisitions();
+    createShortageModal.onDidDismiss(data => {
+      console.log(data);
+      if (!Number.isNaN(data) && data !== null) {
+        item.quantityFilled += data;
+      }
+
+    });
+  }
+
+
   //THIS MAY NEED CHANGED TO IMPROVE FLOW OF APP. THERE ARE 2 ANIMATIONS GOING ON WHICH MAY SEEM CLUNKY
   goToNewReq() {
     this.navCtrl.pop();
@@ -88,6 +106,23 @@ export class ManagePage {
   goToCompletedReqs() {
     this.navCtrl.pop();
     this.navCtrl.push(CompletedRequisitionPage);
+  }
+  
+  edit(req) {
+    this.navCtrl.push(EditPage, this.req);
+  }
+  delete() {
+
+    let confirmModal = this.modalCtrl.create(ConfirmComponent, {itemReqId: this.itemReqId} );
+    let toast = this.toastCtrl.create({
+      message: 'You have deleted requitsition number ',
+      duration: 3000,
+      position: 'top'
+    });
+    confirmModal.present();
+    confirmModal.onDidDismiss(data => {
+      toast.present();
+    });
   }
 
 }
