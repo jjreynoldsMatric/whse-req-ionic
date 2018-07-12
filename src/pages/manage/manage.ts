@@ -35,7 +35,7 @@ export class ManagePage {
   reasonCode: ReasonCode;
   itemReqId: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider, public toastCtrl: ToastController) {
+ 
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider, public toastCtrl: ToastController,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) {
 
     this.itemReqId = this.navParams.data;

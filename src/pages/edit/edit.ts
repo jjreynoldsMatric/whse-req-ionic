@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { ArrayType } from '@angular/compiler/src/output/output_ast';
 
@@ -30,7 +29,6 @@ export class EditPage implements OnInit {
   @Input() itemsArray: ArrayType[];
 
   newReqForm: FormGroup;
-  newReqForm: FormGroup; 
   index: number;
   requisition: Requisition;
   empIndex: number;
@@ -42,7 +40,7 @@ export class EditPage implements OnInit {
   editReq: Requisition;
   editRI: RequisitionItem[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider) {
+  
   constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService, public modalCtrl: ModalController) {
     this.editReq = this.navParams.data;
     this.editRI = this.editReq.requisitionItem
@@ -210,15 +208,10 @@ export class EditPage implements OnInit {
     console.log("ONSELECTCHANGE INDEX" + index) 
   }
 
-  getFormInfo() {
-    let formInfo = this.newReqForm.get('employee').value.empDept;
-    let index = this.empIndex;
-    console.log("EMP DEPT : " + this.empDept);
-    console.log("EMP INDEX : " + index);
-    console.log(formInfo)
+
   onRemove(index){
-    let reqItemId = this.editReq.RequisitionItem[index].Id;
-    let reqId = this.editReq.Id
+    let reqItemId = this.editReq.requisitionItem[index].id;
+    let reqId = this.editReq.id
     let data = {reqId, reqItemId}
     console.log(reqId);
     console.log(reqItemId);

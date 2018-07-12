@@ -17,7 +17,7 @@ import { RequisitionProvider } from '../../providers/requisition/requisition';
 })
 export class OpenRequisitionPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private reqService: RequisitionProvider) { }
+
   requisitions: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private reqService: RequisitionProvider,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) { 
   _ngxZendeskWebwidgetService.show();

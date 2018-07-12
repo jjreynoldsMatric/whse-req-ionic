@@ -13,10 +13,7 @@ export class RequisitionProvider {
   constructor(public http: HttpClient) { }
 
   loadRequisitions() {
-    this.http.get('http://localhost:64778/api/requisition/all').subscribe(response => {
-      this.requisitions = response;
-      //console.log("Requisitions: " + JSON.stringify(this.requisitions));
-    });
+    return this.http.get('http://localhost:64778/api/requisition/all');
   }
 
   saveRequisition(requisition) {
@@ -44,6 +41,12 @@ export class RequisitionProvider {
   }
   updateRequisition(requisition) {
     return this.http.patch('http://localhost:64778/api/requisition/update', requisition);
+  }
+
+  removeReqItem(reqId, reqItemId) { 
+    let params = new HttpParams().set("reqId", reqId) 
+                                 .set("reqItemId", reqItemId); 
+    return this.http.delete('http://localhost:50007/api/requisitions/removeReqItem', {params: params} ); 
   }
 
 }

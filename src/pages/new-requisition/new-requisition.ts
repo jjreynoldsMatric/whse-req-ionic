@@ -35,7 +35,7 @@ export class NewRequisitionPage implements OnInit {
     
     this.itemsArray = [];
     this.requisition = new Requisition;
-    this.requisition.RequisitionItem = new Array<RequisitionItem>();
+    this.requisition.requisitionItem = new Array<RequisitionItem>();
     
 _ngxZendeskWebwidgetService.show();
   }
@@ -146,22 +146,22 @@ _ngxZendeskWebwidgetService.show();
   }
 
   getFormData () {
-    this.requisition.Employee = this.newReqForm.get('Employee').value.EmpFull;
-    this.requisition.Department = this.newReqForm.get('Employee').value.EmpDept;
-    this.requisition.Job = this.newReqForm.controls.Job.value;
+    this.requisition.employee = this.newReqForm.get('Employee').value.empFull;
+    this.requisition.department = this.newReqForm.get('Employee').value.empDept;
+    this.requisition.job = this.newReqForm.controls.job.value;
 
-    let reqitem = <FormArray>this.newReqForm.controls['RequisitionItems'];
-    this.requisition.RequisitionItem = reqitem.value;
+    let reqitem = <FormArray>this.newReqForm.controls['requisitionItems'];
+    this.requisition.requisitionItem = reqitem.value;
     for (let i = 0; i < reqitem.length; i++) {
-      this.requisition.RequisitionItem[i].Item = reqitem.at(i).value.Item;
-      this.requisition.RequisitionItem[i].Quantity = reqitem.at(i).value.Quantity;
+      this.requisition.requisitionItem[i].item = reqitem.at(i).value.item;
+      this.requisition.requisitionItem[i].quantity = reqitem.at(i).value.quantity;
       if (reqitem.at(i).value.lot === null) {
-        this.requisition.RequisitionItem[i].Lot = 0;
+        this.requisition.requisitionItem[i].lot = 0;
       }
 
-      this.requisition.RequisitionItem[i].ReasonCode = reqitem.at(i).value.ReasonCode;
-      if (reqitem.at(i).value.Operation === null) {
-        this.requisition.RequisitionItem[i].Operation = 0;
+      this.requisition.requisitionItem[i].reasonCode = reqitem.at(i).value.reasonCode;
+      if (reqitem.at(i).value.operation === null) {
+        this.requisition.requisitionItem[i].operation = 0;
       }
       
     }
@@ -189,7 +189,7 @@ _ngxZendeskWebwidgetService.show();
   }
 
   getFormInfo() {
-    let formInfo = this.newReqForm.get('Employee').value.EmpDept;
+    let formInfo = this.newReqForm.get('employee').value.empDept;
     let index = this.empIndex;
     console.log("EMP DEPT : " + this.empDept);
     console.log("EMP INDEX : " + index);

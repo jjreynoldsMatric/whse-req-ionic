@@ -35,7 +35,7 @@ export class CompletedRequisitionPage {
     this.navCtrl.popToRoot();
   }
   manage(req: Requisition){
-    this.navCtrl.push(ManagePage, req.Id);
+    this.navCtrl.push(ManagePage, req.id);
   }
   newReq() {
     this.navCtrl.push(NewRequisitionPage);
