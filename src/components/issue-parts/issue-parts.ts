@@ -9,6 +9,7 @@ import { ItemLocationsProvider } from '../../providers/item-locations/item-locat
 import { RequisitionProvider } from '../../providers/requisition/requisition';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PartRequest } from '../../models/partRequest';
+import { ngxZendeskWebwidgetService } from 'ngx-zendesk-webwidget';
 
 
 @Component({
@@ -28,8 +29,6 @@ export class IssuePartsComponent implements OnInit {
   issuePartsForm: FormGroup;
   
   
-
-  constructor(private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController, public viewCtrl: ViewController,private fb: FormBuilder) {
   constructor(private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController, public viewCtrl: ViewController,private fb: FormBuilder,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) {
 
     this.itemReqId = this.navParams.data.id;
