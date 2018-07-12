@@ -34,7 +34,7 @@
         <ion-row style="padding-top: 1px">
             <ion-select [attr.id]="reasonCode" formControlName="reasonCode" placeholder="Reason Code" style="max-width: 100% !important" no-padding >
               <ion-option *ngFor="let reasonCode of reasonCodesService.reasonCodes" >
-                {{reasonCode.code}} - {{reasonCode.description}}
+                {{reasonCode.Code}} - {{reasonCode.Description}}
               </ion-option>
             </ion-select>        
         </ion-row>

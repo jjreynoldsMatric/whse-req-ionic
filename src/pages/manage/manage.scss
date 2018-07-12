@@ -28,8 +28,16 @@ page-manage {
           
            
         }
-        .button{
-            color: #008060;
+        
+        button{
+            &.editButton{
+                background-color: #2DF7C4;
+                color: black;
+            }
+            &.deleteButton{
+                color: black;
+                background-color: red;
+            }
         }
     }
 }

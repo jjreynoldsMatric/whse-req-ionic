@@ -32,19 +32,19 @@
     </ion-row>
 
 
-    <div class="reqs" *ngFor="let req of reqService.requisitions; let i = index" >
-      <div *ngIf="req.filled===false" style="padding-bottom: 10px;">
-        <div *ngIf="req.filled===false" ion-row align-items-center justify-content-center style="border:1px solid black ; border-radius: 10px; font-size: 120%; font-weight: 500; ">
-          <ion-col>{{req.id}}</ion-col>
-          <ion-col *ngIf=" req.job.length == 0 ; ">Misc. Issue</ion-col>
-          <ion-col *ngIf="req.job.length != 0; ">Job Issue</ion-col>
-          <ion-col>{{req.createDate | date:'shortDate'}}</ion-col>
+    <div class="reqs" *ngFor="let req of requisitions; let i = index" >
+      <div *ngIf="req.Filled===false" style="padding-bottom: 10px;">
+        <div *ngIf="req.Filled===false" ion-row align-items-center justify-content-center style="border:1px solid black ; border-radius: 10px; font-size: 120%; font-weight: 500; ">
+          <ion-col>{{req.Id}}</ion-col>
+          <ion-col *ngIf=" req.Job.length == 0 ; ">Misc. Issue</ion-col>
+          <ion-col *ngIf="req.Job.length != 0; ">Job Issue</ion-col>
+          <ion-col>{{req.CreateDate | date:'shortDate'}}</ion-col>
           <ion-col>
             <ion-row>
-              <ion-col>{{req.employee}}</ion-col>
+              <ion-col>{{req.Employee}}</ion-col>
             </ion-row>
             <ion-row>
-              <ion-col>Dept: {{req.department}}</ion-col>
+              <ion-col>Dept: {{req.Department}}</ion-col>
             </ion-row>
           </ion-col>
           <ion-col>
@@ -54,6 +54,7 @@
         </div>
       </div>
     </div>
+    
   </ion-grid>
 
 

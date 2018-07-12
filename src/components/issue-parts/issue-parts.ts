@@ -9,6 +9,7 @@ import { ItemLocationsProvider } from '../../providers/item-locations/item-locat
 import { RequisitionProvider } from '../../providers/requisition/requisition';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PartRequest } from '../../models/partRequest';
+import { ngxZendeskWebwidgetService } from 'ngx-zendesk-webwidget';
 
 
 @Component({
@@ -26,15 +27,14 @@ export class IssuePartsComponent implements OnInit {
   error: any;
   partRequest: PartRequest;
   issuePartsForm: FormGroup;
-  
+  lots: any;
   
 
-  constructor(private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController, public viewCtrl: ViewController,private fb: FormBuilder) {
   constructor(private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController, public viewCtrl: ViewController,private fb: FormBuilder,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) {
 
-    this.itemReqId = this.navParams.data.id;
+    this.itemReqId = this.navParams.data.Id;
+    console.log(this.navParams.data);
     this.reqItem = this.navParams.data;
-    
     _ngxZendeskWebwidgetService.show();
   }
   
@@ -51,14 +51,20 @@ export class IssuePartsComponent implements OnInit {
       quantity: ['', Validators.compose([Validators.required, Validators.pattern("^[0-9]+$")])],
       location: ['', Validators.required]
     })
-
+    this.locationsService.loadLocationsWithLot(this.itemReqId).subscribe(response => {
+      this.lots = response;
+    });
   }
   
   ionViewDidLoad() {
-    this.locationsService.loadLocationsWithLot(this.itemReqId);
+    /*.subscribe(response => {
+      this.lots = response;
+      let locs =this.lots
+      console.log(this.lots)
+    });*/
     this.employeeService.loadWhseEmployees();
     
-    console.log(this.locationsService.lots)
+    console.log(this.lots);
 
     
   }/*
@@ -90,7 +96,7 @@ export class IssuePartsComponent implements OnInit {
   issueParts() {
     
     let toast = this.toastCtrl.create({
-      message: 'You have issued ' + this.issuePartsForm.get('quantity').value + " of " + this.reqItem.item + ' from ' + this.issuePartsForm.get('location').value.location,
+      message: 'You have issued ' + this.issuePartsForm.get('quantity').value + " of " + this.reqItem.Item + ' from ' + this.issuePartsForm.get('location').value.Location,
       duration: 3000,
       position: 'top'
     });

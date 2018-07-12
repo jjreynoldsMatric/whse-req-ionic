@@ -10,15 +10,15 @@ export class EmployeeProvider {
   constructor(public http: HttpClient) { }
 
   loadEmployees() {
-    this.http.get('http://localhost:64778/api/requisition/employees').subscribe(response => {
+    this.http.get('http://localhost:50007/api/employees').subscribe(response => {
 
       this.employees = response;
-      console.log(this.employees)
+      //console.log(this.employees)
     });
   }
 
   loadWhseEmployees() {
-    this.http.get('http://localhost:64778/api/requisition/WhseEmployees').subscribe(response => {
+    this.http.get('http://localhost:50007/api/employees/warehouse').subscribe(response => {
 
       this.whseEmployees = response;
 

@@ -35,14 +35,14 @@ export class ManagePage {
   reasonCode: ReasonCode;
   itemReqId: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider, public toastCtrl: ToastController) {
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider, public toastCtrl: ToastController,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) {
 
     this.itemReqId = this.navParams.data;
-
-
+    console.log(this.itemReqId);
+    
     _ngxZendeskWebwidgetService.show();
   }
+  
   openFeedback(){
     this._ngxZendeskWebwidgetService.activate();
   }
@@ -79,7 +79,7 @@ export class ManagePage {
     issuePartsModal.onDidDismiss(data => {
       console.log(data);
       if (!Number.isNaN(data) && data !== null) {
-        item.quantityFilled += data;
+        item.QuantityFilled += data;
       }
 
     });
@@ -121,7 +121,7 @@ export class ManagePage {
 
     let confirmModal = this.modalCtrl.create(ConfirmComponent, {itemReqId: this.itemReqId} );
     let toast = this.toastCtrl.create({
-      message: 'You have deleted requitsition number ',
+      message: 'You have deleted requitsition number ' + this.itemReqId,
       duration: 3000,
       position: 'top'
     });

@@ -18,10 +18,10 @@
     <ion-grid>
       <div>
   
-        <form [formGroup]="newReqForm" (ngSubmit)="submit()">
+        <form [formGroup]="newForm" (ngSubmit)="submit()">
           <ion-row>
-            <ion-col>
-                Warehouse Requisition: {{this.editReq.id}}
+            <ion-col class="reqNum">
+                Warehouse Requisition: {{this.editReq.Id}}
             </ion-col>
 
 
@@ -33,7 +33,7 @@
                   <label for="employee">Employee</label>
                 </ion-row>
                 <ion-row style="padding-top: 1px">
-                  {{this.editReq.employee}}
+                  {{this.editReq.Employee}}
                 </ion-row>
               </ion-col>
               <ion-col col-4>
@@ -41,9 +41,9 @@
                   <label for="job">Job or MR #</label>
                 </ion-row>
                 <ion-row>
-                  <input type="text" id="job" name="job" formControlName="job">
+                  <input type="text" id="Job" name="Job" formControlName="Job">
                 </ion-row>
-                <div *ngIf="newReqForm.controls.job.dirty && !newReqForm.controls.job.valid">
+                <div *ngIf="newForm.controls.Job.dirty && !newForm.controls.Job.valid">
                   Please enter a valid job number
                 </div>
               </ion-col>
@@ -53,21 +53,21 @@
                 </ion-row>
               
                 <ion-row >
-                  <span>{{this.editReq.department}}</span>
+                  <span>{{this.editReq.Department}}</span>
                  
                 </ion-row>
   
               </ion-col>
             </ion-row>
   
-            <div formArrayName="requisitionItems" style="padding-bottom: 3px" >
+            <div formArrayName="RequisitionItems" style="padding-bottom: 3px" >
               
-              <div *ngFor="let control of newReqForm.controls['requisitionItems'].controls; let i = index" style="border: 1px solid black; border-radius: 10px; margin-top: 10px;">
-                <item-form-control [newReqForm]="newReqForm.controls.requisitionItems.controls[i]" style="padding-bottom: 10px" [index]='i'></item-form-control> 
+              <div *ngFor="let control of newForm.controls['RequisitionItems'].controls; let i = index" style="border: 1px solid black; border-radius: 10px; margin-top: 10px;">
+                <edit-items (remove)='onRemove($event)' [newReqForm]="newForm.controls.RequisitionItems.controls[i]" style="padding-bottom: 10px" [index]='i'></edit-items> 
               </div>
             </div>
           <button ion-button align-right type="button" (click)="addItem()">Add Another Item</button>
-          <button ion-button type="submit" class="btn btn-success"[disabled]="!newReqForm.valid">Submit</button>
+          <button ion-button type="submit" class="btn btn-success"[disabled]="!newForm.valid">Submit</button>
         </form>
   
         <h1 style="color: red">{{errorMessage}}</h1>

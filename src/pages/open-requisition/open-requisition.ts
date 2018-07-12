@@ -1,6 +1,5 @@
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Component } from '@angular/core';
-
 import { ngxZendeskWebwidgetService } from 'ngx-zendesk-webwidget';
 import { Requisition } from '../../models/requisition';
 
@@ -17,8 +16,8 @@ import { RequisitionProvider } from '../../providers/requisition/requisition';
 })
 export class OpenRequisitionPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private reqService: RequisitionProvider) { }
   requisitions: any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private reqService: RequisitionProvider,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) { 
   _ngxZendeskWebwidgetService.show();
   }
@@ -26,25 +25,27 @@ export class OpenRequisitionPage {
   openFeedback(){
     this._ngxZendeskWebwidgetService.activate();
   }
+
   ionViewDidLoad() {
-    this.reqService.loadRequisitions();
     this.reqService.loadRequisitions().subscribe(response => {
       this.requisitions = response;
     });
     console.log("Loading Reqs") 
+    
+    
   }
 
   ionViewWillEnter() {
     console.log("PAGE IS ENTERING");
-    this.reqService.loadRequisitions();
     this.reqService.loadRequisitions().subscribe(response => {
       this.requisitions = response;
       console.log(this.requisitions);
     });
+    
   }
 
   manage(req: Requisition) {
-    this.navCtrl.push(ManagePage, req.id);
+    this.navCtrl.push(ManagePage, req.Id);
   }
 
   goToCompletedReqs() {
@@ -54,6 +55,7 @@ export class OpenRequisitionPage {
   newReq() {
     this.navCtrl.push(NewRequisitionPage);
   }
+ 
 
 
 }

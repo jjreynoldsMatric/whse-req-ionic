@@ -72,7 +72,7 @@ export class CreateShortageComponent implements OnInit {
   createShortage() {
     
     let toast = this.toastCtrl.create({
-      message: 'You have issued ' + this.issuePartsForm.get('quantity').value + " of " + this.reqItem.item + ' from ' + this.issuePartsForm.get('location').value.location,
+      message: 'You have issued ' + this.issuePartsForm.get('Quantity').value + " of " + this.reqItem.Item + ' from ' + this.issuePartsForm.get('Location').value.Location,
       duration: 3000,
       position: 'top'
     });

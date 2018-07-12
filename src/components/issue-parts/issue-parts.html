@@ -12,10 +12,10 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <span>Item: {{reqItem.item}}</span>
+        <span>Item: {{reqItem.Item}}</span>
       </ion-col>
       <ion-col>
-        <span>Quantity: {{reqItem.quantityFilled}}/{{reqItem.quantity}}</span>
+        <span>Quantity: {{reqItem.QuantityFilled}}/{{reqItem.Quantity}}</span>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -51,7 +51,7 @@
             </ion-row>
             <ion-row>
               <select  id="location" formControlName="location" name="location">
-                <option *ngFor="let location of this.locationsService.lots" [ngValue]="location">
+                <option *ngFor="let location of this.lots" [ngValue]="location">
                   {{location.location}}: {{location.qtyOnHand}} from lot #: {{location.lot}}
                 </option>
               </select>

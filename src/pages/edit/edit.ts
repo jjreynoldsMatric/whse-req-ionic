@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { ArrayType } from '@angular/compiler/src/output/output_ast';
 
@@ -13,6 +12,7 @@ import { RequisitionItem } from '../../models/requisitionItem';
 import { ngxZendeskWebwidgetService } from 'ngx-zendesk-webwidget';
 
 import { ConfirmRemoveItemComponent} from '../../components/confirm-remove-item/confirm-remove-item'
+
 /**
  * Generated class for the EditPage page.
  *
@@ -29,7 +29,6 @@ export class EditPage implements OnInit {
   
   @Input() itemsArray: ArrayType[];
 
-  newReqForm: FormGroup;
   newReqForm: FormGroup; 
   index: number;
   requisition: Requisition;
@@ -42,36 +41,39 @@ export class EditPage implements OnInit {
   editReq: Requisition;
   editRI: RequisitionItem[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider) {
   constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService, public modalCtrl: ModalController) {
     this.editReq = this.navParams.data;
-    this.editRI = this.editReq.requisitionItem
+    console.log(this.editReq);
+    
+    this.editRI = this.editReq.RequisitionItem
     this.itemsArray = [];
     this.requisition = new Requisition;
-    this.requisition.requisitionItem = new Array<RequisitionItem>();
-    
+    this.requisition.RequisitionItem = new Array<RequisitionItem>();
+    _ngxZendeskWebwidgetService.show();
   }
+  
   openFeedback(){
     this._ngxZendeskWebwidgetService.activate();
   }
+  
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-
+    
     this.newForm = this.fb.group({
-      employee: [this.editReq.employee, Validators.required],
-      job: [this.editReq.job, Validators.compose([Validators.pattern("^[0-9]+$")])],
-      requisitionItems: this.fb.array([
+      Employee: [this.editReq.Employee, Validators.required],
+      Job: [this.editReq.Job, Validators.compose([Validators.pattern("^[0-9]+$")])],
+      RequisitionItems: this.fb.array([
        
       ])
     });
-    this.arrayControl = <FormArray>this.newForm.controls['requisitionItems'];
+    this.arrayControl = <FormArray>this.newForm.controls['RequisitionItems'];
     this.editRI.forEach(item => {
       let newItem = this.fb.group({
-        item: [item.item ,Validators.required],
-        quantity: [item.quantity, Validators.compose([Validators.required, Validators.pattern("^[0-9]+$")])],
-        reasonCode: [item.reasonCode],
-        operation: [item.operation],
+        Item: [item.Item ,Validators.required],
+        Quantity: [item.Quantity, Validators.compose([Validators.required, Validators.pattern("^[0-9]+$")])],
+        ReasonCode: [item.ReasonCode],
+        Operation: [item.Operation],
       })
       this.arrayControl.push(newItem);
       this.setValidators()
@@ -90,22 +92,37 @@ export class EditPage implements OnInit {
   }
 
   setValidators() {
-    this.newForm.controls['job'].valueChanges.subscribe(() => {
-      if(this.newForm.controls['job']){
+    if(this.newForm.controls['Job'].value === "" || this.newForm.controls['Job'].value === null )
+    {
+      for(let i=0; i<this.arrayControl.length; i++){
+        this.arrayControl.controls[i].get('Operation').disable();
+        this.arrayControl.controls[i].get('ReasonCode').enable();
+        this.arrayControl.controls[i].get('ReasonCode').setValidators(Validators.required);
+        }
+    }
+    else{
+      for(let i=0; i<this.arrayControl.length; i++){
+        this.arrayControl.controls[i].get('Operation').enable();
+        this.arrayControl.controls[i].get('Operation').setValidators(Validators.compose([Validators.pattern("^[0-9]+$"),Validators.required]));
+        this.arrayControl.controls[i].get('ReasonCode').disable();
+      }
+    }
+    this.newForm.controls['Job'].valueChanges.subscribe(() => {
+      if(this.newForm.controls['Job']){
 
         for(let i=0; i<this.arrayControl.length; i++){
-          this.arrayControl.controls[i].get('operation').enable();
-          this.arrayControl.controls[i].get('operation').setValidators(Validators.compose([Validators.pattern("^[0-9]+$"),Validators.required]));
-          this.arrayControl.controls[i].get('reasonCode').disable();
+          this.arrayControl.controls[i].get('Operation').enable();
+          this.arrayControl.controls[i].get('Operation').setValidators(Validators.compose([Validators.pattern("^[0-9]+$"),Validators.required]));
+          this.arrayControl.controls[i].get('ReasonCode').disable();
         }
       }
      
-      if(this.newForm.controls['job'].value == ""){
+      if(this.newForm.controls['Job'].value == ""){
         console.log("NO JOB");
         for(let i=0; i<this.arrayControl.length; i++){
-          this.arrayControl.controls[i].get('operation').disable();
-          this.arrayControl.controls[i].get('reasonCode').enable();
-          this.arrayControl.controls[i].get('reasonCode').setValidators(Validators.required);
+          this.arrayControl.controls[i].get('Operation').disable();
+          this.arrayControl.controls[i].get('ReasonCode').enable();
+          this.arrayControl.controls[i].get('ReasonCode').setValidators(Validators.required);
           }
       }
     });
@@ -114,11 +131,11 @@ export class EditPage implements OnInit {
   initItems() {
     
     return this.fb.group({
-      item: [ '', Validators.required],
-      quantity: ['', Validators.required],
-      lot: [''],
-      reasonCode: ['', Validators.required],
-      operation: [{value: '', disabled: true}],
+      Item: [ '', Validators.required],
+      Quantity: ['', Validators.required],
+      Lot: [''],
+      ReasonCode: ['', Validators.required],
+      Operation: [{value: '', disabled: true}],
     });
     
   }
@@ -126,75 +143,86 @@ export class EditPage implements OnInit {
   initJobItems() {
     
     return this.fb.group({
-      item: ['', Validators.required],
-      quantity: ['', Validators.required],
-      lot: [''],
-      reasonCode: [{value: '', disabled: true}],
-      operation: ['', Validators.required],
+      Item: ['', Validators.required],
+      Quantity: ['', Validators.required],
+      Lot: [''],
+      ReasonCode: [{value: '', disabled: true}],
+      Operation: ['', Validators.required],
     });
     
   }
 
   addItem() {
     console.log("Adding an item!");
-    if(this.newForm.controls['job'].value !== ""){
+    if(this.newForm.controls['Job'].value !== ""){
       console.log("JOB ITEM");
       this.arrayControl.push(this.initJobItems());
     }
     else{
-      
       console.log("NORMAL ITEM");
       this.arrayControl.push(this.initItems());
     }
     
   }
 
-  removeItem(index: number) {
-
-    this.arrayControl.removeAt(index);
-  }
-
   getFormData () {
-    console.log(this.requisition);
-    console.log(this.editReq);
+    this.requisition.Id = this.editReq.Id;
+    this.requisition.Employee = this.editReq.Employee;
+    this.requisition.Department = this.editReq.Department;
+    this.requisition.Job = this.newReqForm.controls.Job.value;
+    this.requisition.Filled = this.editReq.Filled;
+    let reqitems = <FormArray>this.newReqForm.controls['RequisitionItems'];
     
-    this.requisition.id = this.editReq.id;
-    this.requisition.employee = this.editReq.employee;
-    this.requisition.department = this.editReq.department;
-    this.requisition.job = this.newReqForm.controls.job.value;
-    this.requisition.filled = this.editReq.filled;
-    let reqitem = <FormArray>this.newReqForm.controls['requisitionItems'];
-    this.requisition.requisitionItem = reqitem.value;
-    for (let i = 0; i < reqitem.length; i++) {
-      /*
-      if (this.editReq.requisitionItem[i].id !== null){
-        this.requisition.requisitionItem[i].id = this.editReq.requisitionItem[i].id;
-      }*/
+    for (let i = 0; i < reqitems.length; i++) {
       
-      this.requisition.requisitionItem[i].item = reqitem.at(i).value.item;
-      this.requisition.requisitionItem[i].quantity = reqitem.at(i).value.quantity;
-      this.requisition.requisitionItem[i].quantityFilled = reqitem.at(i).value.quantityFilled;
-      if (this.editReq.requisitionItem[i].filled === undefined){
-        this.editReq.requisitionItem[i].filled = false;
-      }
-      this.requisition.requisitionItem[i].filled = this.editReq.requisitionItem[i].filled;
-      this.requisition.requisitionItem[i].itemDescription = this.editReq.requisitionItem[i].itemDescription;
-      this.requisition.requisitionItem[i].lot = this.editReq.requisitionItem[i].lot;
-      
+      var reqitem = new RequisitionItem;
 
-      this.requisition.requisitionItem[i].reasonCode = reqitem.at(i).value.reasonCode;
-      if (reqitem.at(i).value.operation === null) {
-        this.requisition.requisitionItem[i].operation = 0;
+      reqitem.Item = '';
+      reqitem.ItemDescription = '';
+      reqitem.Quantity = null;
+      reqitem.Lot = null;
+      reqitem.ReasonCode = '';
+      reqitem.Operation = null;
+      reqitem.QuantityFilled = null;
+      reqitem.Filled = false;
+      reqitem.Id = null;
+
+      reqitem.Item = reqitems.at(i).value.Item;
+      reqitem.Quantity = reqitems.at(i).value.Quantity;
+      reqitem.QuantityFilled = reqitems.at(i).value.QuantityFilled;
+      reqitem.Id = this.editReq.RequisitionItem[i].Id;
+
+      if (reqitems.at(i).value.Filled === undefined){
+        reqitem.Filled = false;
+      }else{
+          reqitem.Filled = reqitems.at(i).value.Filled;
+      }
+      if(reqitems.at(i).value.ItemDescription === undefined){
+        reqitem.ItemDescription = null;
       }
       else{
-        this.requisition.requisitionItem[i].operation = this.editReq.requisitionItem[i].operation;
+        reqitem.ItemDescription = reqitems.at(i).value.ItemDescription;
+  
+      }  
+      if(reqitems.at(i).value.ReasonCode === undefined){
+        reqitem.ReasonCode = null;
+      }else{
+        reqitem.ReasonCode = reqitems.at(i).value.ReasonCode;
       }
       
+      if (reqitems.at(i).value.Operation === null) {
+        reqitem.Operation = 0;
+      }
+      else{
+        reqitem.Operation = reqitems.at(i).value.Operation;
+      }
+      this.requisition.RequisitionItem[i] = reqitem
     }
   }
 
   submit() {
     this.getFormData();
+    
     console.log(this.requisition)
     this.reqService.updateRequisition(this.requisition).subscribe(response => {
       console.log("Should have posted the req");
@@ -210,12 +238,6 @@ export class EditPage implements OnInit {
     console.log("ONSELECTCHANGE INDEX" + index) 
   }
 
-  getFormInfo() {
-    let formInfo = this.newReqForm.get('employee').value.empDept;
-    let index = this.empIndex;
-    console.log("EMP DEPT : " + this.empDept);
-    console.log("EMP INDEX : " + index);
-    console.log(formInfo)
   onRemove(index){
     let reqItemId = this.editReq.RequisitionItem[index].Id;
     let reqId = this.editReq.Id
@@ -233,6 +255,7 @@ export class EditPage implements OnInit {
       }
       
     })
+  
   }
 
 }

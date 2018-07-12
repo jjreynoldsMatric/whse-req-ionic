@@ -9,7 +9,7 @@ export class ItemsProvider {
   getItemDescription(item) {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.get(`http://localhost:64778/api/requisition/itemdesc?item=${item}`, { headers: headers });
+    return this.http.get(`/api/items/${item}`, { headers: headers });
   }
 
 }

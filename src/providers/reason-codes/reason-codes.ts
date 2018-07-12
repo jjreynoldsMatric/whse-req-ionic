@@ -7,8 +7,10 @@ export class ReasonCodesProvider {
   constructor(public http: HttpClient) { }
 
   loadReasonCodes() {
-    this.http.get('http://localhost:64778/api/requisition/reasoncodes').subscribe(response => {
+    this.http.get('http://localhost:50007/api/requisitions/reasoncodes').subscribe(response => {
       this.reasonCodes = response;
+      console.log(this.reasonCodes);
+      
     })
   }
 

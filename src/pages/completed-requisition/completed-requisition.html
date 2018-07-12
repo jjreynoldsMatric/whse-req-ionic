@@ -30,14 +30,14 @@
         </ion-row>
 
     
-        <div *ngFor="let req of reqService.requisitions; let i = index" >
-            <div *ngIf="req.filled===true" style="padding-bottom: 10px;">
-            <div *ngIf="req.filled===true" ion-row align-items-center style="border:1px solid black ; border-radius: 10px; font-size: 120%; font-weight: 500">
-              <ion-col>{{req.id}}</ion-col>
-              <ion-col *ngIf="req.job.length == 0; ">Misc. Issue</ion-col>
-              <ion-col *ngIf="req.job.length != 0; ">Job Issue</ion-col>
-              <ion-col>{{req.createDate | date:'shortDate'}}</ion-col>
-              <ion-col>{{req.employee}}</ion-col>
+        <div *ngFor="let req of requisitions; let i = index" >
+            <div *ngIf="req.Filled===true" style="padding-bottom: 10px;">
+            <div *ngIf="req.Filled===true" ion-row align-items-center style="border:1px solid black ; border-radius: 10px; font-size: 120%; font-weight: 500">
+              <ion-col>{{req.Id}}</ion-col>
+              <ion-col *ngIf="req.Job.length == 0; ">Misc. Issue</ion-col>
+              <ion-col *ngIf="req.Job.length != 0; ">Job Issue</ion-col>
+              <ion-col>{{req.CreateDate | date:'shortDate'}}</ion-col>
+              <ion-col>{{req.Employee}}</ion-col>
               <ion-col>
                 <button ion-button color="secondary"  (click)="manage(req)">Manage</button>
                <!--color="secondary" <button ion-button (click)="deleteReq(req)">Delete</button>-->
