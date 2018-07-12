@@ -15,6 +15,7 @@ import { RequisitionProvider } from '../../providers/requisition/requisition';
 import { CreateShortageComponent } from '../../components/create-shortage/create-shortage';
 import { EditPage } from '../edit/edit';
 import { ConfirmComponent } from '../../components/confirm/confirm';
+import { ngxZendeskWebwidgetService } from 'ngx-zendesk-webwidget';
 
 @IonicPage()
 @Component({
@@ -35,10 +36,15 @@ export class ManagePage {
   itemReqId: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public reqService: RequisitionProvider, public toastCtrl: ToastController,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) {
 
     this.itemReqId = this.navParams.data;
 
 
+    _ngxZendeskWebwidgetService.show();
+  }
+  openFeedback(){
+    this._ngxZendeskWebwidgetService.activate();
   }
   /*
     ngOnInit() {

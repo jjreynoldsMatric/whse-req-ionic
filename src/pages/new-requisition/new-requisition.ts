@@ -9,6 +9,7 @@ import { RequisitionProvider } from '../../providers/requisition/requisition';
 
 import { Requisition } from '../../models/models';
 import { RequisitionItem } from '../../models/requisitionItem';
+import { ngxZendeskWebwidgetService } from 'ngx-zendesk-webwidget';
 
 
 @IonicPage()
@@ -30,14 +31,20 @@ export class NewRequisitionPage implements OnInit {
   newForm: FormGroup;
   arrayControl: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) {
     
     this.itemsArray = [];
     this.requisition = new Requisition;
-    this.requisition.requisitionItem = new Array<RequisitionItem>();
+    this.requisition.RequisitionItem = new Array<RequisitionItem>();
     
-
+_ngxZendeskWebwidgetService.show();
   }
+  
+  openFeedback(){
+    this._ngxZendeskWebwidgetService.activate();
+  }
+
+  
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
@@ -68,7 +75,6 @@ export class NewRequisitionPage implements OnInit {
   
     this.newReqForm = this.newForm;
   }
-
   ionViewWillLoad() {
     this.employeeService.loadEmployees();
     this.reasonCodesService.loadReasonCodes();
@@ -140,22 +146,22 @@ export class NewRequisitionPage implements OnInit {
   }
 
   getFormData () {
-    this.requisition.employee = this.newReqForm.get('employee').value.empFull;
-    this.requisition.department = this.newReqForm.get('employee').value.empDept;
-    this.requisition.job = this.newReqForm.controls.job.value;
+    this.requisition.Employee = this.newReqForm.get('Employee').value.EmpFull;
+    this.requisition.Department = this.newReqForm.get('Employee').value.EmpDept;
+    this.requisition.Job = this.newReqForm.controls.Job.value;
 
-    let reqitem = <FormArray>this.newReqForm.controls['requisitionItems'];
-    this.requisition.requisitionItem = reqitem.value;
+    let reqitem = <FormArray>this.newReqForm.controls['RequisitionItems'];
+    this.requisition.RequisitionItem = reqitem.value;
     for (let i = 0; i < reqitem.length; i++) {
-      this.requisition.requisitionItem[i].item = reqitem.at(i).value.item;
-      this.requisition.requisitionItem[i].quantity = reqitem.at(i).value.quantity;
+      this.requisition.RequisitionItem[i].Item = reqitem.at(i).value.Item;
+      this.requisition.RequisitionItem[i].Quantity = reqitem.at(i).value.Quantity;
       if (reqitem.at(i).value.lot === null) {
-        this.requisition.requisitionItem[i].lot = 0;
+        this.requisition.RequisitionItem[i].Lot = 0;
       }
 
-      this.requisition.requisitionItem[i].reasonCode = reqitem.at(i).value.reasonCode;
-      if (reqitem.at(i).value.operation === null) {
-        this.requisition.requisitionItem[i].operation = 0;
+      this.requisition.RequisitionItem[i].ReasonCode = reqitem.at(i).value.ReasonCode;
+      if (reqitem.at(i).value.Operation === null) {
+        this.requisition.RequisitionItem[i].Operation = 0;
       }
       
     }
@@ -183,7 +189,7 @@ export class NewRequisitionPage implements OnInit {
   }
 
   getFormInfo() {
-    let formInfo = this.newReqForm.get('employee').value.empDept;
+    let formInfo = this.newReqForm.get('Employee').value.EmpDept;
     let index = this.empIndex;
     console.log("EMP DEPT : " + this.empDept);
     console.log("EMP INDEX : " + index);

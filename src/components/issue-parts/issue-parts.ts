@@ -30,10 +30,16 @@ export class IssuePartsComponent implements OnInit {
   
 
   constructor(private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController, public viewCtrl: ViewController,private fb: FormBuilder) {
+  constructor(private employeeService: EmployeeProvider, private navParams: NavParams, private locationsService: ItemLocationsProvider, private reqService: RequisitionProvider, private toastCtrl: ToastController, public viewCtrl: ViewController,private fb: FormBuilder,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService) {
 
     this.itemReqId = this.navParams.data.id;
     this.reqItem = this.navParams.data;
     
+    _ngxZendeskWebwidgetService.show();
+  }
+  
+  openFeedback(){
+    this._ngxZendeskWebwidgetService.activate();
   }
 
   ngOnInit(): void {

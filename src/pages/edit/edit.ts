@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { ArrayType } from '@angular/compiler/src/output/output_ast';
 
 import { EmployeeProvider } from '../../providers/employee/employee';
@@ -9,7 +10,9 @@ import { RequisitionProvider } from '../../providers/requisition/requisition';
 
 import { Requisition } from '../../models/models';
 import { RequisitionItem } from '../../models/requisitionItem';
+import { ngxZendeskWebwidgetService } from 'ngx-zendesk-webwidget';
 
+import { ConfirmRemoveItemComponent} from '../../components/confirm-remove-item/confirm-remove-item'
 /**
  * Generated class for the EditPage page.
  *
@@ -27,6 +30,7 @@ export class EditPage implements OnInit {
   @Input() itemsArray: ArrayType[];
 
   newReqForm: FormGroup;
+  newReqForm: FormGroup; 
   index: number;
   requisition: Requisition;
   empIndex: number;
@@ -39,12 +43,16 @@ export class EditPage implements OnInit {
   editRI: RequisitionItem[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private employeeService: EmployeeProvider, private reasonCodesService: ReasonCodesProvider, private fb: FormBuilder, private reqService: RequisitionProvider,private _ngxZendeskWebwidgetService: ngxZendeskWebwidgetService, public modalCtrl: ModalController) {
     this.editReq = this.navParams.data;
     this.editRI = this.editReq.requisitionItem
     this.itemsArray = [];
     this.requisition = new Requisition;
     this.requisition.requisitionItem = new Array<RequisitionItem>();
     
+  }
+  openFeedback(){
+    this._ngxZendeskWebwidgetService.activate();
   }
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -208,6 +216,23 @@ export class EditPage implements OnInit {
     console.log("EMP DEPT : " + this.empDept);
     console.log("EMP INDEX : " + index);
     console.log(formInfo)
+  onRemove(index){
+    let reqItemId = this.editReq.RequisitionItem[index].Id;
+    let reqId = this.editReq.Id
+    let data = {reqId, reqItemId}
+    console.log(reqId);
+    console.log(reqItemId);
+    
+    let confirmRemoveModal = this.modalCtrl.create(ConfirmRemoveItemComponent, data);
+    const arrayControl = <FormArray>this.newReqForm.controls['RequisitionItems'];
+    confirmRemoveModal.present();
+    confirmRemoveModal.onDidDismiss(dis => {
+      console.log(dis);
+      if(dis === true){
+        arrayControl.removeAt(this.index);
+      }
+      
+    })
   }
 
 }

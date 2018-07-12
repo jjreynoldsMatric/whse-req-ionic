@@ -1,0 +1,34 @@
+
+<ion-header>
+  <ion-title><span style="font-size: 3rem;">Delete Item</span></ion-title>
+</ion-header>
+
+<ion-content class="no-scroll ">
+  <ion-grid class="no-scroll ">
+      <ion-row>
+          <ion-col>
+            <h2 style="padding-bottom: 0px; margin-bottom: 0px;">WARNING</h2>
+          </ion-col>
+        </ion-row>
+    <ion-row>
+      <ion-col>
+        <p style="padding-top: 0; margin-top: 0px;">ARE YOU SURE YOU WANT TO DELETE THIS ITEM? THIS ACTION IS PERMANENT AND CANNOT BE UNDONE. WHEN YOU PRESS CONFIRM, THE ITEM WILL BE REMOVED. PLEASE USE CAUTION</p>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col>
+        <button ion-button color="danger" class="btn btn-success" (click)="cancel()">Cancel</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button type="submit" class="btn btn-success" (click)="confirm()">Delete this Item</button> 
+      </ion-col>
+
+
+    </ion-row>
+
+    <h1 style="color: red">{{this.errorMessage}}</h1>
+
+  </ion-grid>
+
+</ion-content>

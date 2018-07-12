@@ -1,0 +1,60 @@
+<div class="form-group" [formGroup]="newReqForm" >
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-row>
+          <label [attr.for]="'item'+index">Matric Part #</label>
+        </ion-row>
+        <ion-row>
+          <input type="text" [attr.id]="item" formControlName="Item" (keyup.enter)="enterItem(newReqForm.get('Item').value)"
+          (blur)="enterItem(newReqForm.get('item').value)" >
+        </ion-row>
+        
+        <ion-row>
+          <span class="smallspan" [ngStyle]="{'color':this.itemDesc === 'Could not find this item' ? 'red' : 'black' }">{{this.itemDesc}}</span>
+        </ion-row>
+
+      </ion-col>
+      <ion-col>
+        <ion-row>
+          <label [attr.for]="'quantity'+index">Quantity</label>
+        </ion-row>
+        <ion-row>
+          <ion-col no-padding>
+            <input type="number" [attr.id]="quantity" formControlName="Quantity" >
+          </ion-col>
+          
+        </ion-row>
+<!--[disabled]="this.newReqForm.parent.parent.get('job').value !== ''-->
+      </ion-col>
+      <ion-col>
+        <ion-row>
+          <label [attr.for]="'reasonCode'+index">Reason Code</label>
+        </ion-row>
+        <ion-row style="padding-top: 1px">
+            <ion-select [attr.id]="reasonCode" formControlName="ReasonCode" placeholder="Reason Code" style="max-width: 100% !important" no-padding >
+              <ion-option *ngFor="let reasonCode of reasonCodesService.reasonCodes" >
+                {{reasonCode.Code}} - {{reasonCode.Description}}
+              </ion-option>
+            </ion-select>        
+        </ion-row>
+      </ion-col>
+      <ion-col>
+        <ion-row>
+          <label [attr.for]="operation">Operation</label>
+        </ion-row>
+        <ion-row>
+          <input type="number" [attr.id]="operation" formControlName="Operation">
+        </ion-row>
+        
+      </ion-col>
+      <ion-col>
+        <button type="button" class="removeBtn" ion-button (click)="removeItem(index)">Remove</button>
+      </ion-col>
+     <!--   <ion-col>
+      <button type="button" ion-button (click)="getFormInfo()">GET FORM</button>
+      </ion-col>
+      -->
+    </ion-row>
+  </ion-grid>
+</div>

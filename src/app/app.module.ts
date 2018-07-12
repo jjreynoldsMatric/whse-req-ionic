@@ -19,6 +19,8 @@ import { IssuePartsComponent } from '../components/issue-parts/issue-parts';
 import { CreateShortageComponent } from '../components/create-shortage/create-shortage';
 import { ItemFormControlComponent } from '../components/item-form-control/item-form-control';
 import { ConfirmComponent } from '../components/confirm/confirm'; 
+import { ConfirmRemoveItemComponent } from '../components/confirm-remove-item/confirm-remove-item';
+import { EditItemsComponent } from '../components/edit-items/edit-items';
 
 
 import { EmployeeProvider } from '../providers/employee/employee';
@@ -26,6 +28,18 @@ import { ItemLocationsProvider } from '../providers/item-locations/item-location
 import { RequisitionProvider } from '../providers/requisition/requisition';
 import { ReasonCodesProvider } from '../providers/reason-codes/reason-codes';
 import { ItemsProvider } from '../providers/items/items'; 
+
+import { ngxZendeskWebwidgetModule, ngxZendeskWebwidgetConfig } from 'ngx-zendesk-webwidget';
+
+
+export class ZendeskConfig extends ngxZendeskWebwidgetConfig {
+  accountUrl = 'matric.zendesk.com';
+  beforePageLoad(zE) {
+    zE.setLocale('en');
+    zE.hide();
+  }
+}
+
 
 @NgModule({
   declarations: [
@@ -38,7 +52,9 @@ import { ItemsProvider } from '../providers/items/items';
     IssuePartsComponent,
     ItemFormControlComponent,
     CreateShortageComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    ConfirmRemoveItemComponent,
+    EditItemsComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +62,7 @@ import { ItemsProvider } from '../providers/items/items';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    ngxZendeskWebwidgetModule.forRoot(ZendeskConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -59,7 +75,10 @@ import { ItemsProvider } from '../providers/items/items';
     IssuePartsComponent,
     ItemFormControlComponent,
     CreateShortageComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    ConfirmRemoveItemComponent,
+    EditItemsComponent
+    
   ],
   providers: [
     StatusBar,
@@ -71,6 +90,9 @@ import { ItemsProvider } from '../providers/items/items';
     RequisitionProvider,
     ReasonCodesProvider,
     ItemsProvider
+  ],
+  exports: [
+    ngxZendeskWebwidgetModule
   ]
 })
 export class AppModule {}
